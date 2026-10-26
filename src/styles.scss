@@ -1,0 +1,210 @@
+/* Global styles for BOLD — Maison de Bain */
+
+@use './styles/tokens';
+@use './styles/buttons';
+
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@200;300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap');
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/assets/fonts/Satoshi-Regular.woff2') format('woff2'),
+       url('/assets/fonts/Satoshi-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/assets/fonts/Satoshi-Medium.woff2') format('woff2'),
+       url('/assets/fonts/Satoshi-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/assets/fonts/Satoshi-SemiBold.woff2') format('woff2'),
+       url('/assets/fonts/Satoshi-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/assets/fonts/Satoshi-Bold.woff2') format('woff2'),
+       url('/assets/fonts/Satoshi-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: 100%;
+}
+
+/* overflow-x: clip (not hidden) — "hidden" forces the browser to compute overflow-y as
+   auto too, which turns body into its own scroll container and breaks position:sticky
+   on the header (it ends up sticking relative to body's scrollport, not the viewport). */
+body {
+  overflow-x: clip;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--text-primary);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.heading {
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* ---- Editorial utilities (shared across pages) ---- */
+
+/* Tracked uppercase micro-label above headings: "COLLECTION — 01" */
+.lux-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--brand-primary);
+}
+
+.lux-label::before {
+  content: '';
+  width: 34px;
+  height: 1px;
+  background: var(--brand-primary);
+}
+
+/* Large editorial heading — light grotesque, quietly tracked */
+.lux-heading {
+  font-family: var(--font-heading);
+  font-weight: 300;
+  font-size: clamp(1.9rem, 4.2vw, 3.1rem);
+  line-height: 1.16;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.lux-heading em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--brand-primary);
+}
+
+/* Editorial section rhythm */
+.lux-section {
+  padding: clamp(64px, 9vw, 140px) 0;
+}
+
+.lux-container {
+  width: min(1320px, calc(100% - clamp(32px, 6vw, 96px)));
+  margin: 0 auto;
+}
+
+.lux-hairline {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 0;
+}
+
+/* Quiet image treatment — slow zoom on hover, no other motion */
+.lux-media {
+  overflow: hidden;
+  background: var(--bg-alt);
+}
+
+.lux-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .lux-media:hover img {
+    transform: scale(1.04);
+  }
+}
+
+/* Understated text link with hairline underline reveal */
+.lux-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--track-nav);
+  color: var(--ink);
+  text-decoration: none;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--ink);
+  transition: color var(--transition), border-color var(--transition);
+}
+
+.lux-link:hover {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+/* Single, restrained entrance animation (page-load only — no scroll hijacking) */
+@keyframes lux-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lux-fade-up {
+  animation: lux-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lux-fade-up {
+    animation: none;
+  }
+  .lux-media img {
+    transition: none;
+  }
+}
+
+/* Sticky footer: every routed page renders <app-header>, its content, and <app-footer>
+   as direct siblings right after <router-outlet>. Making that page host a full-height
+   flex column and pushing the footer down with margin-top:auto keeps it pinned to the
+   bottom of the viewport on short pages, while still flowing normally below long content. */
+router-outlet+* {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg-page);
+}
+
+router-outlet+* app-footer {
+  margin-top: auto;
+}

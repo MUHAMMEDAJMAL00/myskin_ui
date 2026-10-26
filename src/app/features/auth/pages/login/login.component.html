@@ -1,0 +1,42 @@
+<div class="auth-page">
+  <div class="auth-page__panel lux-fade-up">
+    <span class="lux-label">The Maison</span>
+    <h1 class="lux-heading auth-page__heading">Welcome <em>back</em></h1>
+    <p class="auth-page__intro">Sign in to continue to your account.</p>
+
+    <form class="auth-page__form" (ngSubmit)="onSubmit()">
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="login-email">Email</label>
+        <input
+          id="login-email"
+          type="email"
+          class="auth-page__input"
+          placeholder="Enter email"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="login-password">Password</label>
+        <input
+          id="login-password"
+          type="password"
+          class="auth-page__input"
+          placeholder="Enter password"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100 auth-page__submit" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="auth-page__switch">
+      <span class="auth-page__switch-text">New to the maison?</span>
+      <button type="button" class="lux-link auth-page__switch-link" (click)="goToSignup()">Create an account</button>
+    </div>
+  </div>
+</div>

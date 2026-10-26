@@ -1,0 +1,163 @@
+<app-header></app-header>
+
+<div class="category-page">
+
+  <!-- Hero Banner -->
+  <div class="pl-hero">
+    <div class="pl-hero__bg">
+      <img src="assets/bold/bg-productdetails.jpeg" alt="" />
+      <div class="pl-hero__veil"></div>
+    </div>
+    <div class="pl-hero__body">
+      <span class="pl-hero__label">{{ currentCategory?.name || 'The Collection' }}</span>
+      <h1 class="pl-hero__title">{{ currentCategory?.name || 'Curated for the Connoisseur' }}</h1>
+      <p class="pl-hero__desc">{{ currentCategory?.description || 'Bathware composed in Dubai for those who treat the everyday as ceremony.' }}</p>
+      <a class="pl-hero__cta" (click)="scrollToProducts()">
+        Explore Collection
+        <i class="bi bi-arrow-right"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="pl-container">
+
+    <!-- Sidebar + Main layout -->
+    <div class="pl-layout">
+
+      <!-- Sidebar -->
+      <aside class="pl-sidebar"
+        [class.pl-sidebar--mobile]="isMobile"
+        [class.pl-sidebar--open]="isMobile && sidebarOpen"
+      >
+        @if (isMobile) {
+          <div class="pl-sidebar__head">
+            <span class="pl-sidebar__title">Collections</span>
+            <button class="pl-sidebar__close" (click)="sidebarOpen = false"><i class="bi bi-x-lg"></i></button>
+          </div>
+        } @else {
+          <div class="pl-sidebar__head"><span class="pl-sidebar__title">Collections</span></div>
+        }
+        <div class="pl-sidebar__links">
+          @for (item of categories; track item.id) {
+            <a [routerLink]="['/catalog', 'category', item.id]"
+              class="pl-sidebar__link"
+              [class.pl-sidebar__link--active]="item.id === categoryId"
+              (click)="closeSidebar()">
+              {{ item.name }}
+            </a>
+          }
+        </div>
+      </aside>
+
+      @if (isMobile && sidebarOpen) {
+        <div class="pl-overlay" (click)="sidebarOpen = false"></div>
+      }
+
+      @if (isMobile) {
+        <div class="pl-mobile-bar">
+          <button class="pl-mobile-bar__btn" (click)="toggleSidebar()">
+            <i class="bi bi-grid-3x3-gap"></i>
+            <span>Collections</span>
+          </button>
+        </div>
+      }
+
+      <!-- Main -->
+      <main class="pl-main">
+
+        <!-- Toolbar -->
+        <div class="pl-toolbar">
+          <div class="pl-toolbar__left">
+            <span class="pl-toolbar__count">{{ totalProducts }} products</span>
+          </div>
+          <div class="pl-toolbar__search">
+            <i class="bi bi-search"></i>
+            <input type="text" placeholder="Search" [value]="searchTerm" (input)="onSearchInput($any($event.target).value)" />
+            @if (searchTerm) {
+              <button class="pl-toolbar__clear" (click)="onSearchInput('')"><i class="bi bi-x-lg"></i></button>
+            }
+          </div>
+          <select class="pl-toolbar__sort" [ngModel]="sortField + '|' + sortOrder" (ngModelChange)="onSortChange($event)">
+            <option value="price|">Featured</option>
+            <option value="price|asc">Price: Low to High</option>
+            <option value="price|desc">Price: High to Low</option>
+            <option value="name|asc">Name: A to Z</option>
+            <option value="newest|desc">Newest</option>
+          </select>
+        </div>
+
+        <!-- Loading -->
+        @if (loading) {
+          <div class="pl-grid">
+            @for (_ of skeletonItems; track $index) {
+              <div class="pl-card pl-card--skeleton">
+                <div class="pl-card__img"><div class="skeleton-shimmer"></div></div>
+                <div class="pl-card__body">
+                  <div class="skeleton-line skeleton-line--sm"></div>
+                  <div class="skeleton-line"></div>
+                  <div class="skeleton-line skeleton-line--md"></div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Products -->
+        @if (!loading && products.length > 0) {
+          <div class="pl-carousel-wrap">
+            <button class="pl-carousel__arrow pl-carousel__arrow--prev" (click)="prevPage()" [disabled]="page === 1">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <div class="pl-grid">
+              @for (p of products; track p.id) {
+                <a [routerLink]="['/catalog', 'product', p.id]" class="pl-card" (click)="onProductClick(p)">
+                  <div class="pl-card__img">
+                    <img [src]="p.image_url | imageUrl" [alt]="p.name" loading="lazy" />
+                    @if (p.is_new) {
+                      <span class="pl-card__badge">NEW</span>
+                    }
+                    <button class="pl-card__wishlist" (click)="$event.stopPropagation(); $event.preventDefault(); addToWishlist(p)">
+                      <i class="bi bi-heart"></i>
+                    </button>
+                  </div>
+                  <div class="pl-card__body">
+                    <span class="pl-card__brand">BOLD</span>
+                    <h3 class="pl-card__title">{{ p.name }}</h3>
+                    <span class="pl-card__price">₹ {{ p.selling_price | number:'1.2-2' }}</span>
+                  </div>
+                </a>
+              }
+            </div>
+            <button class="pl-carousel__arrow pl-carousel__arrow--next" (click)="nextPage()" [disabled]="page === totalPages">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+
+          <!-- Pagination -->
+          @if (totalPages > 1) {
+            <div class="pl-pagination">
+              @for (pg of pageNumbers; track pg) {
+                <button class="pl-pagination__num" [class.pl-pagination__num--active]="pg === page" (click)="goToPage(pg)">{{ pg }}</button>
+              }
+            </div>
+          }
+        }
+
+        <!-- Empty -->
+        @if (!loading && products.length === 0) {
+          <div class="pl-empty">
+            <div class="pl-empty__icon"><i class="bi bi-search"></i></div>
+            <h3 class="pl-empty__title">Nothing to show</h3>
+            <p class="pl-empty__desc">Try another collection or refine your search.</p>
+            @if (searchTerm) {
+              <button class="pl-empty__reset" (click)="onSearchInput('')">Clear Search</button>
+            }
+          </div>
+        }
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

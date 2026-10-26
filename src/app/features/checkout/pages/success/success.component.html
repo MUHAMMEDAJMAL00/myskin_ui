@@ -1,0 +1,76 @@
+<div class="success-page">
+  @if (order) {
+    <div class="success-page__card" id="invoice-content">
+      <div class="success-page__header">
+        <i class="bi bi-patch-check success-page__icon"></i>
+        <span class="lux-label success-page__label">With Gratitude</span>
+        <h2 class="lux-heading success-page__heading">Order <em>Confirmed</em></h2>
+        <p>Thank you. Your order has been placed successfully.</p>
+      </div>
+
+      <div class="success-page__body">
+        <div class="success-page__invoice-head">
+          <div>
+            <strong>Invoice</strong>
+            <small>#{{ orderNumber }}</small>
+          </div>
+          <small>{{ order.sale_date | date: 'mediumDate' }}</small>
+        </div>
+
+        <table class="success-page__table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th class="text-center">Qty</th>
+              <th class="text-end">Price</th>
+              <th class="text-end">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of order.items; track item.product_id) {
+              <tr>
+                <td>{{ item.product_name }}</td>
+                <td class="text-center">{{ item.quantity }}</td>
+                <td class="text-end">₹{{ item.unit_price }}</td>
+                <td class="text-end fw-bold">₹{{ item.total_price }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <div class="success-page__totals">
+          <div class="success-page__total-row"><span>Subtotal</span><span>₹{{ order.subtotal }}</span></div>
+          @if (order.discount_amount > 0) {
+            <div class="success-page__total-row success-page__total-row--discount"><span>Discount</span><span>-₹{{ order.discount_amount }}</span></div>
+          }
+          @if (order.tax_amount > 0) {
+            <div class="success-page__total-row"><span>GST</span><span>+₹{{ order.tax_amount }}</span></div>
+          }
+          <div class="success-page__total-row"><span>Delivery</span><span>₹{{ order.shipping_charge }}</span></div>
+          <div class="success-page__divider"></div>
+          <div class="success-page__total-row success-page__total-row--final"><span>Total</span><span>₹{{ order.total_amount }}</span></div>
+        </div>
+
+        <div class="success-page__status">
+          <span class="success-page__badge" [style.background]="statusBg(order.status)" [style.color]="statusColor(order.status)">
+            {{ order.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="success-page__actions">
+        <button class="success-page__btn success-page__btn--outline" (click)="printInvoice()"><i class="bi bi-printer"></i> Print</button>
+        <a routerLink="/my-orders" class="success-page__btn success-page__btn--primary"><i class="bi bi-box"></i> Track</a>
+        <a routerLink="/" class="success-page__btn success-page__btn--outline"><i class="bi bi-house"></i> Home</a>
+      </div>
+    </div>
+  }
+
+  @if (!order) {
+    <div class="success-page__empty">
+      <span class="lux-label">With Gratitude</span>
+      <p>No order information available.</p>
+      <a routerLink="/" class="success-page__btn success-page__btn--primary">Go Shopping</a>
+    </div>
+  }
+</div>

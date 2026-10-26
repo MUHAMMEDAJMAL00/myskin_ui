@@ -1,0 +1,46 @@
+<app-header></app-header>
+
+<div class="wishlist-page">
+  <div class="lux-container">
+    <header class="wishlist-page__head">
+      <span class="lux-label">Your Selections</span>
+      <h1 class="lux-heading">The <em>Wishlist</em></h1>
+    </header>
+
+    @if (items.length === 0) {
+      <app-empty-state
+        icon="heart"
+        title="Your wishlist is empty"
+        message="Save items you love so you can find them easily later."
+        actionLabel="Browse Products"
+        actionLink="/"
+      ></app-empty-state>
+    } @else {
+      <div class="wishlist-page__grid">
+        @for (item of items; track item._id) {
+          <article class="wishlist-page__card" [class.wishlist-page__card--oos]="isOutOfStock(item)">
+            @if (isOutOfStock(item)) {
+              <div class="wishlist-page__oos-badge">Out of Stock</div>
+            }
+            <div class="wishlist-page__media lux-media">
+              <img [src]="item.product.image_url | imageUrl" [alt]="item.product.name" class="wishlist-page__image" />
+            </div>
+
+            <div class="wishlist-page__body">
+              <h3 class="wishlist-page__name">{{ item.product.name }}</h3>
+              <p class="wishlist-page__description">{{ item.product.description }}</p>
+              <div class="wishlist-page__price">₹ {{ item.price }}</div>
+
+              <div class="wishlist-page__actions">
+                <button class="btn btn-outline-dark w-100 wishlist-page__add" (click)="addToCart(item)" [disabled]="isOutOfStock(item)">Add to Cart</button>
+                <button class="wishlist-page__remove" (click)="remove(item)">Remove</button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer></app-footer>

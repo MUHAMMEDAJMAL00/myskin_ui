@@ -1,0 +1,53 @@
+<div class="user-sidebar d-none d-md-block">
+  <div class="user-sidebar__user-card">
+    <div class="user-sidebar__avatar">
+      <span>{{ userName[0] }}</span>
+    </div>
+    <h6 class="user-sidebar__user-name">{{ userName }}</h6>
+    <p class="user-sidebar__user-email">{{ userEmail }}</p>
+  </div>
+
+  <nav class="user-sidebar__nav">
+    <button
+      class="user-sidebar__nav-item"
+      [class.user-sidebar__nav-item--active]="isMyOrdersActive"
+      (click)="goToMyOrders()"
+    >
+      <i class="bi bi-box-seam"></i>
+      <span>My Orders</span>
+    </button>
+    <button
+      class="user-sidebar__nav-item"
+      [class.user-sidebar__nav-item--active]="isAddressesActive"
+      (click)="goToAddresses()"
+    >
+      <i class="bi bi-geo-alt"></i>
+      <span>Addresses</span>
+    </button>
+    <button
+      class="user-sidebar__nav-item user-sidebar__nav-item--logout"
+      (click)="logout()"
+    >
+      <i class="bi bi-box-arrow-right"></i>
+      <span>Sign Out</span>
+    </button>
+  </nav>
+</div>
+
+<div class="d-block d-md-none user-sidebar__mobile">
+  <div class="user-sidebar__mobile-user">
+    <div class="user-sidebar__mobile-avatar">{{ userName[0] }}</div>
+    <div>
+      <div class="fw-semibold">{{ userName }}</div>
+      <small class="text-muted">{{ userEmail }}</small>
+    </div>
+  </div>
+  <div class="user-sidebar__mobile-nav">
+    <button class="user-sidebar__mobile-btn" [class.user-sidebar__mobile-btn--active]="isMyOrdersActive" (click)="goToMyOrders()">
+      <i class="bi bi-box-seam"></i> My Orders
+    </button>
+    <button class="user-sidebar__mobile-btn user-sidebar__mobile-btn--danger" (click)="logout()">
+      <i class="bi bi-box-arrow-right"></i> Sign Out
+    </button>
+  </div>
+</div>

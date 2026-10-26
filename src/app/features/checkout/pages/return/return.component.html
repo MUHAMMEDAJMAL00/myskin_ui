@@ -1,0 +1,100 @@
+<app-header></app-header>
+
+@if (!item) {
+  <div class="return-page return-page--empty">
+    <span class="lux-label">Client Care</span>
+    <h1 class="lux-heading">Returns</h1>
+    <p class="return-page__empty-text">Product data not available.</p>
+    <a routerLink="/account/my-orders" class="btn btn-outline-dark">Go Back</a>
+  </div>
+} @else {
+  <div class="return-page">
+    <div class="return-page__head">
+      <span class="lux-label">Client Care</span>
+      <h1 class="lux-heading">Returns</h1>
+    </div>
+
+    <div class="return-page__card">
+      <div class="return-page__media lux-media">
+        <img [src]="item.image | imageUrl" [alt]="item.name" class="return-page__image" />
+      </div>
+
+      <div class="return-page__details">
+        <h2 class="return-page__name">{{ item.name }}</h2>
+
+        <div class="return-page__meta">
+          <div class="return-page__meta-row">
+            <span class="return-page__meta-label">Order ID</span>
+            <span class="return-page__meta-value">{{ orderId }}</span>
+          </div>
+          <div class="return-page__meta-row">
+            <span class="return-page__meta-label">Price</span>
+            <span class="return-page__meta-value">₹ {{ item.price }}</span>
+          </div>
+          <div class="return-page__meta-row">
+            <span class="return-page__meta-label">Quantity</span>
+            <span class="return-page__meta-value">{{ item.qty }}</span>
+          </div>
+        </div>
+
+        <button class="btn btn-outline-dark return-page__return-btn" (click)="openModal()">
+          <i class="bi bi-arrow-return-left"></i> Return
+        </button>
+      </div>
+    </div>
+
+    @if (showModal) {
+      <div class="return-page__modal-backdrop modal fade show d-flex align-items-center justify-content-center" (click)="closeModal()">
+        <div class="modal-dialog" (click)="$event.stopPropagation()">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Return Product</h5>
+              <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+              <div class="return-page__modal-meta">
+                <div class="return-page__meta-row">
+                  <span class="return-page__meta-label">Product</span>
+                  <span class="return-page__meta-value">{{ item.name }}</span>
+                </div>
+                <div class="return-page__meta-row">
+                  <span class="return-page__meta-label">Order ID</span>
+                  <span class="return-page__meta-value">{{ orderId }}</span>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label return-page__form-label">Select Reason</label>
+                <div class="form-check">
+                  <input type="radio" id="damaged" name="reason" value="Damaged Product" [(ngModel)]="reasonType" class="form-check-input" />
+                  <label for="damaged" class="form-check-label">Damaged Product</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" id="poor" name="reason" value="Quality is poor" [(ngModel)]="reasonType" class="form-check-input" />
+                  <label for="poor" class="form-check-label">Quality is poor</label>
+                </div>
+                <div class="form-check">
+                  <input type="radio" id="other" name="reason" value="other" [(ngModel)]="reasonType" class="form-check-input" />
+                  <label for="other" class="form-check-label">Other Reason</label>
+                </div>
+              </div>
+
+              @if (reasonType === 'other') {
+                <div class="mb-3">
+                  <label class="form-label return-page__form-label">Description</label>
+                  <textarea class="form-control" [(ngModel)]="description" rows="4" placeholder="Enter your reason for returning"></textarea>
+                </div>
+              }
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>
+              <button type="button" class="btn btn-primary" (click)="submit()">Submit Return</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+}
+
+<app-footer></app-footer>

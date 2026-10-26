@@ -1,0 +1,27 @@
+<div class="category-popover">
+  <div class="row">
+    <div class="col-6">
+      @for (cat of leftItems; track cat.id) {
+        <a [routerLink]="['/catalog', 'category', cat.id]" class="category-popover__link">
+          <div class="category-popover__text">{{ cat.name }}</div>
+        </a>
+      }
+    </div>
+    <div class="col-6">
+      @for (cat of rightItems; track cat.id) {
+        <a [routerLink]="['/catalog', 'category', cat.id]" class="category-popover__link">
+          <div class="category-popover__text">{{ cat.name }}</div>
+        </a>
+      }
+    </div>
+  </div>
+
+  @if (titleImage) {
+    <div class="category-popover__promo">
+      <img [src]="titleImage" alt="promotion" class="category-popover__promo-image" />
+      @if (extraText) {
+        <div class="category-popover__promo-text">{{ extraText }}</div>
+      }
+    </div>
+  }
+</div>

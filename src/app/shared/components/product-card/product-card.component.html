@@ -1,0 +1,44 @@
+<div
+  class="product-card"
+  [class.product-card--fixed]="fixedHeight"
+  [class.product-card--out-of-stock]="isOutOfStock"
+>
+  <a [routerLink]="['/catalog', 'product', product.id]" class="product-card__link">
+    <div class="product-card__media lux-media">
+      <img
+        [src]="product.image_url | imageUrl"
+        [alt]="product.name"
+        class="product-card__image"
+      />
+      @if (discountBadge) {
+        <span class="product-card__flag">{{ discountBadge }}</span>
+      }
+      @if (isOutOfStock) {
+        <span class="product-card__oos">Sold Out</span>
+      }
+      <button
+        type="button"
+        class="product-card__wishlist"
+        (click)="addToWishlist($event)"
+        aria-label="Add to wishlist"
+      >
+        <i class="bi bi-heart"></i>
+      </button>
+    </div>
+
+    <div class="product-card__body">
+      @if (product.brand) {
+        <span class="product-card__brand">{{ product.brand }}</span>
+      } @else {
+        <span class="product-card__brand">Bold</span>
+      }
+      <h3 class="product-card__title">{{ product.name }}</h3>
+      <div class="product-card__meta">
+        <span class="product-card__price">₹ {{ product.selling_price }}</span>
+        @if (hasStockInfo && stockQty > 0 && stockQty <= product.alert_quantity) {
+          <span class="product-card__stock">Only {{ stockQty }} remain</span>
+        }
+      </div>
+    </div>
+  </a>
+</div>

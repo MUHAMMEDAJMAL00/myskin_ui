@@ -1,0 +1,128 @@
+<app-header></app-header>
+
+@if (!product) {
+  <div class="pd">
+    <div class="pd__container">
+      <div class="pd__gallery">
+        <app-skeleton variant="image" height="520px"></app-skeleton>
+      </div>
+      <div class="pd__info">
+        <app-skeleton variant="text" width="70%" height="28px"></app-skeleton>
+        <app-skeleton variant="text" width="100%"></app-skeleton>
+        <app-skeleton variant="text" width="90%"></app-skeleton>
+        <app-skeleton variant="text" width="40%" height="24px"></app-skeleton>
+        <app-skeleton variant="text" width="50%" height="32px"></app-skeleton>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="pd">
+    <div class="pd__container">
+      <div class="pd__gallery">
+        <div class="pd__image-card">
+          <img
+            [src]="currentImage | imageUrl"
+            [alt]="selectedVariant?.variant_name || product.name"
+            class="pd__image"
+          />
+          @if (selectedVariant) {
+            <span class="pd__badge">{{ selectedVariant.variant_name }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="pd__info">
+        <span class="pd__category">{{ product.Category?.name || product.brand || 'BOLD' }}</span>
+        <h1 class="pd__title">{{ product.name }}</h1>
+
+        <div class="pd__price-row">
+          <span class="pd__price">₹{{ totalPrice | number:'1.2-2' }}</span>
+          @if (currentMrp > currentPrice) {
+            <span class="pd__old-price">₹{{ currentMrp * quantity | number:'1.2-2' }}</span>
+          }
+          @if (discountBadge) {
+            <span class="pd__discount">{{ discountBadge }}</span>
+          }
+        </div>
+
+        @if (hasVariants) {
+          <div class="pd__variants">
+            <span class="pd__label">Finish / Variant</span>
+            <div class="pd__variant-list">
+              <button type="button" class="pd__variant-btn" [class.pd__variant-btn--active]="!selectedVariant" (click)="selectVariant(null)">
+                <span class="pd__variant-name">Signature</span>
+                <span class="pd__variant-price">₹{{ formatPrice(product!.selling_price) }}</span>
+              </button>
+              @for (variant of product.variants; track variant.id) {
+                <button type="button" class="pd__variant-btn" [class.pd__variant-btn--active]="selectedVariant?.id === variant.id" (click)="selectVariant(variant)">
+                  <span class="pd__variant-name">{{ variant.variant_name }}</span>
+                  <span class="pd__variant-price">₹{{ formatPrice(variant.selling_price) }}</span>
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        @if (!isOutOfStock) {
+          <div class="pd__qty-section">
+            <span class="pd__label">Quantity</span>
+            <div class="pd__qty">
+              <button type="button" (click)="decrement()" [disabled]="quantity <= 1"><i class="bi bi-dash"></i></button>
+              <input type="text" readonly [value]="quantity" />
+              <button type="button" (click)="increment()"><i class="bi bi-plus"></i></button>
+            </div>
+          </div>
+        }
+
+        <div class="pd__actions">
+          @if (isOutOfStock) {
+            <button class="pd__btn pd__btn--disabled" disabled>Sold Out</button>
+          } @else if (isInCart) {
+            <button class="pd__btn pd__btn--primary" [routerLink]="['/cart']">View Cart</button>
+            <button class="pd__btn pd__btn--outline" (click)="buyNow()">Buy Now</button>
+          } @else {
+            <button class="pd__btn pd__btn--primary" (click)="addToCart()">Add to Cart</button>
+            <button class="pd__btn pd__btn--outline" (click)="buyNow()">Buy Now</button>
+          }
+          <button type="button" class="pd__wishlist" (click)="toggleWishlist()" [class.pd__wishlist--active]="isWishlisted">
+            <i class="bi" [class.bi-heart]="!isWishlisted" [class.bi-heart-fill]="isWishlisted"></i>
+          </button>
+        </div>
+
+        @if (product.description) {
+          <div class="pd__desc-wrap" [class.pd__desc-wrap--clamped]="!showFullDescription">
+            <p class="pd__desc">{{ product.description }}</p>
+            @if (product.description.length > 80) {
+              <span class="pd__desc-toggle" (click)="toggleDescription()">
+                {{ showFullDescription ? 'Read less' : 'Read more' }}
+              </span>
+            }
+          </div>
+        }
+
+        <dl class="pd__meta">
+          <div class="pd__meta-row">
+            <dt>Reference</dt>
+            <dd>{{ selectedVariant?.sku || product.sku }}</dd>
+          </div>
+          <div class="pd__meta-row">
+            <dt>Availability</dt>
+            <dd [class.pd__meta--success]="stockStatus.class === 'text-success'">{{ stockStatus.label }}</dd>
+          </div>
+          <div class="pd__meta-row">
+            <dt>Client Care</dt>
+            <dd><a href="mailto:info&#64;mybold.com">info&#64;mybold.com</a></dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  @if (product) {
+    <div class="pd__related">
+      <app-related-products [product]="product"></app-related-products>
+    </div>
+  }
+}
+
+<app-footer></app-footer>

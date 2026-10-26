@@ -1,0 +1,15 @@
+@if (products.length > 0) {
+  <section class="recent lux-section">
+    <div class="lux-container">
+      <div class="recent__head">
+        <span class="lux-label">Your Selections</span>
+        <h2 class="lux-heading">Recently <em>admired</em></h2>
+      </div>
+      <div class="recent__grid">
+        @for (p of products; track p.id) {
+          <app-product-card [product]="p"></app-product-card>
+        }
+      </div>
+    </div>
+  </section>
+}

@@ -1,0 +1,453 @@
+$gold: #B08A45;
+$ink: #1A1817;
+
+.pd {
+  background: #FAF8F4;
+  padding: 120px 0 80px;
+
+  &__container {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px 0 0;
+    width: 100%;
+    align-items: start;
+
+    @media (max-width: 1000px) {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    @media (max-width: 640px) {
+      padding: 0 20px;
+    }
+  }
+}
+
+.pd__gallery {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+
+  @media (max-width: 1000px) {
+    position: static;
+  }
+}
+
+.pd__image-card {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+
+  img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.6s ease;
+
+    &:hover {
+      transform: scale(1.04);
+    }
+  }
+}
+
+.pd__badge {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 6px;
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $ink;
+}
+
+// ── Info Column ───────────────────────────────────────────────────────────────
+
+.pd__info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 560px;
+  width: 100%;
+}
+
+.pd__category {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: $gold;
+}
+
+.pd__title {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 3.8vw, 3.2rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: $ink;
+  margin: 0;
+}
+
+// ── Price ─────────────────────────────────────────────────────────────────────
+
+.pd__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pd__price {
+  font-size: clamp(1.6rem, 2.5vw, 2rem);
+  font-weight: 700;
+  color: $ink;
+}
+
+.pd__old-price {
+  font-size: 0.95rem;
+  color: #9B968D;
+  text-decoration: line-through;
+}
+
+.pd__discount {
+  padding: 4px 14px;
+  background: rgba($gold, 0.12);
+  color: $gold;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+// ── Labels ────────────────────────────────────────────────────────────────────
+
+.pd__label {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8A8681;
+  margin-bottom: 10px;
+}
+
+// ── Variants ──────────────────────────────────────────────────────────────────
+
+.pd__variants {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd__variant-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pd__variant-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid #E4DFD4;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $ink;
+  }
+
+  &--active {
+    border-color: $ink;
+    background: #F8F5F0;
+  }
+}
+
+.pd__variant-name {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $ink;
+}
+
+.pd__variant-price {
+  font-size: 0.65rem;
+  color: #8A8681;
+}
+
+// ── Quantity ──────────────────────────────────────────────────────────────────
+
+.pd__qty-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd__qty {
+  display: inline-flex;
+  align-items: stretch;
+
+  button {
+    width: 36px;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid #E4DFD4;
+    color: $ink;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: background 0.25s ease;
+
+    &:hover:not(:disabled) {
+      background: #F8F5F0;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    &:first-child {
+      border-right: none;
+    }
+
+    &:last-child {
+      border-left: none;
+    }
+  }
+
+  input {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #E4DFD4;
+    background: transparent;
+    text-align: center;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 0.75rem;
+    color: $ink;
+    outline: none;
+  }
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+
+.pd__actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pd__btn {
+  flex: 0 1 auto;
+  min-width: 100px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.35s ease;
+  font-family: 'Inter', -apple-system, sans-serif;
+  position: relative;
+
+  &--primary {
+    background: $ink;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    &:hover {
+      background: $gold;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba($gold, 0.25);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: none;
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    color: $ink;
+    border: 1px solid rgba($ink, 0.15);
+
+    &:hover {
+      background: $ink;
+      color: #fff;
+      border-color: $ink;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  &--disabled {
+    background: #F1EDE5;
+    color: #9B968D;
+    border: none;
+    cursor: default;
+  }
+}
+
+.pd__wishlist {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: $ink;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  padding: 4px;
+
+  &:hover,
+  &--active {
+    color: #c0392b;
+    border-color: #c0392b;
+  }
+}
+
+// ── Description ───────────────────────────────────────────────────────────────
+
+.pd__desc-wrap--clamped .pd__desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pd__desc {
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: #6E6A63;
+  margin: 0;
+}
+
+.pd__desc-toggle {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: $gold;
+  cursor: pointer;
+
+  &:hover {
+    color: #8C6D3F;
+  }
+}
+
+// ── Meta / Detail Rows ────────────────────────────────────────────────────────
+
+.pd__meta {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.pd__meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+
+  dt {
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #9B968D;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 0.78rem;
+    font-weight: 400;
+    color: $ink;
+    text-align: right;
+
+    a {
+      color: $gold;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.pd__meta--success {
+  color: #2D7D46 !important;
+}
+
+// ── Related Products ──────────────────────────────────────────────────────────
+
+.pd__related {
+  max-width: 1400px;
+  margin: 24px auto 0;
+  padding: 18px 12px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+
+  @media (max-width: 640px) {
+    padding: 14px 12px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .pd {
+    padding: 100px 0 60px;
+  }
+
+  .pd__container {
+    gap: 24px;
+  }
+
+  .pd__gallery {
+    padding-top: 40px;
+  }
+
+  .pd__title {
+    font-size: 1.8rem;
+  }
+
+  .pd__actions {
+    flex-direction: column;
+  }
+
+  .pd__btn,
+  .pd__wishlist {
+    width: 100%;
+  }
+}

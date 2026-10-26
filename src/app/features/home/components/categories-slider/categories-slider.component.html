@@ -1,0 +1,68 @@
+@if (categories.length > 0) {
+  <section class="collections lux-section">
+    <div class="lux-container">
+      <div class="collections__head">
+        <div>
+          <span class="lux-label">The Collections</span>
+          <h2 class="lux-heading">Objects of <em>quiet luxury</em></h2>
+          <p class="collections__desc">
+            Discover our curated worlds — each collection defined by purpose, material, and quiet conviction.
+          </p>
+        </div>
+        <div class="collections__nav">
+          <button
+            type="button"
+            class="collections__nav-btn"
+            aria-label="Previous group"
+            (click)="prevGroup()"
+            [disabled]="currentGroup === 0"
+          >
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <button
+            type="button"
+            class="collections__nav-btn"
+            aria-label="Next group"
+            (click)="nextGroup()"
+            [disabled]="currentGroup >= groups.length - 1"
+          >
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    @if (groups.length > 0) {
+      <div class="lux-container collections__group">
+        <div class="collections__grid">
+          @for (category of groups[currentGroup]; track category.id; let i = $index) {
+            <a
+              [routerLink]="['/catalog', 'category', category.id]"
+              class="collections__card"
+              [class.collections__card--featured]="i === 0"
+              [class.collections__card--small]="i >= 1 && i <= 3"
+              [class.collections__card--wide]="i === 4"
+            >
+              <div class="collections__card-media">
+                <img [src]="artFor(category)" [alt]="category.name" loading="lazy" />
+                <div class="collections__card-shade"></div>
+              </div>
+              <div class="collections__card-overlay">
+                <span class="collections__card-index">{{ indexLabel(currentGroup * 5 + i) }}</span>
+                <div class="collections__card-info">
+                  <span class="collections__card-name">{{ category.name }}</span>
+                  @if (i === 0) {
+                    <span class="collections__card-subtitle">{{ subtitleFor(category) }}</span>
+                  }
+                </div>
+                <span class="collections__card-arrow" aria-hidden="true">
+                  <i class="bi bi-arrow-right"></i>
+                </span>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+    }
+  </section>
+}

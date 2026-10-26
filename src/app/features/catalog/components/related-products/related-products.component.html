@@ -1,0 +1,17 @@
+@if (!loading && products.length > 0) {
+  <section class="related-products lux-section">
+    <div class="lux-container">
+      <div class="related-products__head">
+        <span class="lux-label">Complete the Composition</span>
+        <h2 class="lux-heading">You may also <em>admire</em></h2>
+      </div>
+      <div class="related-products__grid">
+        @for (item of products; track item.id) {
+          <div (click)="goToProduct(item.id)">
+            <app-product-card [product]="item"></app-product-card>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+}

@@ -1,0 +1,136 @@
+<div class="app-header">
+  <div class="app-header__notice">
+    <span>Bold International FZCO — Dubai</span>
+    <span class="app-header__notice-sep"></span>
+    <span>Complimentary delivery across the Emirates</span>
+  </div>
+
+  <div class="app-header__bar">
+    <div class="app-header__left">
+      <button
+        type="button"
+        class="app-header__menu-icon"
+        aria-label="Open menu"
+        (click)="openMobileMenu(mobileMenu)"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
+      <nav class="app-header__nav">
+        <a routerLink="/" class="app-header__nav-link">Home</a>
+
+        <div class="app-header__nav-group">
+          <span class="app-header__nav-link app-header__nav-link--parent">
+            Collections
+            <i class="bi bi-chevron-down"></i>
+          </span>
+          <div class="app-header__dropdown">
+            @for (master of topLevelCategories; track master.id) {
+              <a
+                class="app-header__dropdown-link"
+                [class.app-header__dropdown-link--active]="
+                  isCategoryActive(master.id)
+                "
+                (click)="navigateToCategory(master.id)"
+              >
+                {{ master.name }}
+              </a>
+            }
+          </div>
+        </div>
+
+        <a routerLink="/about" class="app-header__nav-link">About</a>
+      </nav>
+    </div>
+
+    <div class="app-header__brand" (click)="goToHome()">
+      <span class="app-header__wordmark">BOLD</span>
+      <span class="app-header__tagline">Maison de Bain — Dubai</span>
+    </div>
+
+    <div class="app-header__actions">
+      <a routerLink="/wishlist" class="app-header__icon-link" title="Wishlist">
+        <i class="bi bi-heart"></i>
+        @if (wishlistCount > 0) {
+          <span class="app-header__badge">{{ wishlistCount }}</span>
+        }
+      </a>
+      <a routerLink="/cart" class="app-header__icon-link" title="Cart">
+        <i class="bi bi-cart3"></i>
+        @if (cartCount > 0) {
+          <span class="app-header__badge">{{ cartCount }}</span>
+        }
+      </a>
+      <button
+        type="button"
+        class="app-header__icon-link"
+        title="Account"
+        (click)="auth.currentCustomer ? goToMyOrders() : goToLogin()"
+      >
+        <i class="bi bi-person-circle"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #mobileMenu let-offcanvas>
+  <div class="offcanvas-header app-header__mobile-head">
+    <div>
+      <div class="app-header__wordmark app-header__wordmark--sm">BOLD</div>
+      <div class="app-header__tagline">Maison de Bain</div>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss()"
+    ></button>
+  </div>
+  <div class="offcanvas-body p-0">
+    <div class="app-header__mobile-caption">Collections</div>
+    @for (master of topLevelCategories; track master.id) {
+      <div
+        class="app-header__mobile-master"
+        [class.app-header__mobile-master--expanded]="
+          expandedCategoryId === master.id
+        "
+        [class.app-header__mobile-master--active]="isCategoryActive(master.id)"
+        (click)="
+          childrenOf(master.id).length
+            ? toggleExpanded(master.id)
+            : navigateToCategory(master.id, offcanvas.dismiss)
+        "
+      >
+        <span>{{ master.name }}</span>
+        @if (childrenOf(master.id).length) {
+          <i
+            class="bi"
+            [ngClass]="
+              expandedCategoryId === master.id
+                ? 'bi-chevron-up'
+                : 'bi-chevron-down'
+            "
+          ></i>
+        }
+      </div>
+      @if (expandedCategoryId === master.id) {
+        @for (child of childrenOf(master.id); track child.id) {
+          <div
+            class="app-header__mobile-child"
+            [class.app-header__mobile-child--active]="
+              activeCategoryId === child.id
+            "
+            (click)="navigateToCategory(child.id, offcanvas.dismiss)"
+          >
+            {{ child.name }}
+          </div>
+        }
+      }
+    }
+    <div
+      class="app-header__mobile-item"
+      (click)="navigateToAbout(offcanvas.dismiss)"
+    >
+      About</div>
+  </div>
+</ng-template>

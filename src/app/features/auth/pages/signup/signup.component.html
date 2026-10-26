@@ -1,0 +1,82 @@
+<div class="auth-page">
+  <div class="auth-page__panel lux-fade-up">
+    <span class="lux-label">The Maison</span>
+    <h1 class="lux-heading auth-page__heading">Create an <em>account</em></h1>
+    <p class="auth-page__intro">Join the maison to follow your orders and selections.</p>
+
+    <form class="auth-page__form" (ngSubmit)="onSubmit()">
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="signup-name">Name</label>
+        <input
+          id="signup-name"
+          type="text"
+          class="auth-page__input"
+          placeholder="Enter name"
+          autocomplete="off"
+          [(ngModel)]="name"
+          name="name"
+          required
+        />
+      </div>
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="signup-email">Email</label>
+        <input
+          id="signup-email"
+          type="email"
+          class="auth-page__input"
+          placeholder="Enter email"
+          autocomplete="off"
+          [(ngModel)]="email"
+          name="email"
+          required
+        />
+      </div>
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="signup-phone">Phone Number</label>
+        <input
+          id="signup-phone"
+          type="text"
+          class="auth-page__input"
+          placeholder="Enter phone (optional)"
+          autocomplete="off"
+          [(ngModel)]="phone"
+          name="phone"
+        />
+      </div>
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="signup-password">Password</label>
+        <input
+          id="signup-password"
+          type="password"
+          class="auth-page__input"
+          placeholder="Enter password"
+          autocomplete="off"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
+      <div class="auth-page__field">
+        <label class="auth-page__label" for="signup-confirm">Confirm Password</label>
+        <input
+          id="signup-confirm"
+          type="password"
+          class="auth-page__input"
+          placeholder="Confirm password"
+          autocomplete="off"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+      </div>
+      <button type="submit" class="btn btn-primary w-100 auth-page__submit" [disabled]="loading">
+        {{ loading ? 'Creating account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <div class="auth-page__switch">
+      <span class="auth-page__switch-text">Already have an account?</span>
+      <a routerLink="/login" class="lux-link auth-page__switch-link">Sign in</a>
+    </div>
+  </div>
+</div>

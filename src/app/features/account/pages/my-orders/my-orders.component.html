@@ -1,0 +1,340 @@
+<app-header></app-header>
+
+<div class="orders-page">
+  <div class="orders-container">
+
+    <!-- Sidebar -->
+      <aside class="orders-sidebar">
+      <div class="orders-sidebar__card">
+        <div class="orders-sidebar__profile">
+          <div class="orders-sidebar__avatar">
+            <span>{{ currentCustomer?.name?.[0] || 'U' }}</span>
+          </div>
+          <div class="orders-sidebar__badge">Gold Member</div>
+          <h3 class="orders-sidebar__name">{{ currentCustomer?.name || 'User' }}</h3>
+          <p class="orders-sidebar__email">{{ currentCustomer?.email || '' }}</p>
+          <div class="orders-sidebar__quick">
+            <div class="orders-sidebar__quick-item">
+              <span class="orders-sidebar__quick-value">{{ orderCount }}</span>
+              <span class="orders-sidebar__quick-label">Orders</span>
+            </div>
+            <div class="orders-sidebar__quick-item">
+              <span class="orders-sidebar__quick-value">0</span>
+              <span class="orders-sidebar__quick-label">Wishlist</span>
+            </div>
+          </div>
+        </div>
+        <nav class="orders-sidebar__nav">
+          <a class="orders-sidebar__nav-item orders-sidebar__nav-item--active">
+            <i class="bi bi-box-seam"></i>
+            <span>My Orders</span>
+          </a>
+          <a class="orders-sidebar__nav-item" routerLink="/wishlist">
+            <i class="bi bi-heart"></i>
+            <span>Wishlist</span>
+          </a>
+          <a class="orders-sidebar__nav-item orders-sidebar__nav-item--logout" (click)="logout()">
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+          </a>
+        </nav>
+        <div class="orders-sidebar__support">
+          <i class="bi bi-headset"></i>
+          <div>
+            <strong>Need Assistance?</strong>
+            <p>Our team is here to help</p>
+          </div>
+          <button class="orders-sidebar__support-btn">Contact</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="orders-main">
+
+      <!-- Header -->
+      <div class="orders-header">
+        <div>
+          <span class="orders-header__label">Your Account</span>
+          <h1 class="orders-header__title">Orders</h1>
+          <p class="orders-header__subtitle">Track and manage your orders effortlessly.</p>
+        </div>
+        <button class="orders-header__edit" (click)="openEditModal()">
+          <i class="bi bi-pencil"></i> Edit Profile
+        </button>
+      </div>
+
+      <!-- Stats -->
+      <div class="orders-stats">
+        <div class="orders-stat">
+          <div class="orders-stat__icon orders-stat__icon--total"><i class="bi bi-receipt"></i></div>
+          <div class="orders-stat__number">{{ orderCount }}</div>
+          <div class="orders-stat__label">Total Orders</div>
+        </div>
+        <div class="orders-stat">
+          <div class="orders-stat__icon orders-stat__icon--delivered"><i class="bi bi-check2-all"></i></div>
+          <div class="orders-stat__number">{{ countByStatus('delivered') + countByStatus('completed') }}</div>
+          <div class="orders-stat__label">Delivered</div>
+        </div>
+        <div class="orders-stat">
+          <div class="orders-stat__icon orders-stat__icon--active"><i class="bi bi-arrow-repeat"></i></div>
+          <div class="orders-stat__number">{{ countByStatus('pending') + countByStatus('confirmed') + countByStatus('processing') + countByStatus('shipped') }}</div>
+          <div class="orders-stat__label">Active</div>
+        </div>
+        <div class="orders-stat">
+          <div class="orders-stat__icon orders-stat__icon--cancelled"><i class="bi bi-x-circle"></i></div>
+          <div class="orders-stat__number">{{ countByStatus('cancelled') }}</div>
+          <div class="orders-stat__label">Cancelled</div>
+        </div>
+      </div>
+
+      <!-- Pill Filters -->
+      <div class="orders-filters">
+        @for (tab of tabs; track tab.key) {
+          <button
+            class="orders-filter"
+            [class.orders-filter--active]="activeTab === tab.key"
+            (click)="setTab(tab.key)"
+          >
+            {{ tab.label }}
+            <span class="orders-filter__count">{{ tab.key === 'all' ? orderCount : countByStatus(tab.key) }}</span>
+          </button>
+        }
+      </div>
+
+      <!-- Loading -->
+      @if (loading) {
+        <div class="orders-loading">
+          <div class="spinner-border" role="status"></div>
+          <p>Loading your orders...</p>
+        </div>
+      }
+
+      <!-- Empty State -->
+      @if (!loading && filteredOrders.length === 0) {
+        <div class="orders-empty">
+          <div class="orders-empty__icon">
+            <i class="bi bi-box-seam"></i>
+          </div>
+          <h3>No Orders Yet</h3>
+          <p>You haven't placed any orders yet. Discover our premium bathroom collections.</p>
+          <div class="orders-empty__actions">
+            <a routerLink="/" class="orders-empty__btn orders-empty__btn--primary">Explore Collection</a>
+            <a routerLink="/" class="orders-empty__btn orders-empty__btn--outline">Continue Shopping</a>
+          </div>
+        </div>
+      }
+
+      <!-- Orders Table -->
+      @if (!loading && filteredOrders.length > 0) {
+        <div class="orders-table-wrap">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Date</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (order of filteredOrders; track order.id) {
+                <tr class="orders-row" (click)="openOrderModal(order)">
+                  <td class="orders-row__invoice">
+                    <i class="bi bi-receipt"></i>
+                    <span>#{{ order.invoice_number }}</span>
+                  </td>
+                  <td class="orders-row__date">
+                    <i class="bi bi-calendar3"></i>
+                    {{ order.sale_date | date: 'MMM dd, yyyy' }}
+                  </td>
+                  <td class="orders-row__items">{{ order.items.length }} item{{ order.items.length !== 1 ? 's' : '' }}</td>
+                  <td class="orders-row__total">₹{{ order.total_amount.toFixed(2) }}</td>
+                  <td>
+                    <span class="orders-badge" [style.background]="statusBg(order.status)" [style.color]="statusColor(order.status)">
+                      <i class="bi" [ngClass]="{
+                        'bi-clock': order.status === 'pending',
+                        'bi-check2-circle': order.status === 'confirmed',
+                        'bi-arrow-repeat': order.status === 'processing',
+                        'bi-truck': order.status === 'shipped',
+                        'bi-check2-all': order.status === 'delivered' || order.status === 'completed',
+                        'bi-x-circle': order.status === 'cancelled'
+                      }"></i>
+                      {{ order.status }}
+                    </span>
+                  </td>
+                  <td class="orders-row__chevron"><i class="bi bi-chevron-right"></i></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+      <!-- Benefits -->
+      <div class="orders-benefits">
+        <div class="orders-benefit">
+          <i class="bi bi-truck"></i>
+          <div>
+            <strong>Free Shipping</strong>
+            <span>Complimentary delivery across the Emirates</span>
+          </div>
+        </div>
+        <div class="orders-benefit">
+          <i class="bi bi-lock"></i>
+          <div>
+            <strong>Secure Payments</strong>
+            <span>Encrypted checkout with trusted gateways</span>
+          </div>
+        </div>
+        <div class="orders-benefit">
+          <i class="bi bi-arrow-counterclockwise"></i>
+          <div>
+            <strong>Easy Returns</strong>
+            <span>14-day return policy</span>
+          </div>
+        </div>
+        <div class="orders-benefit">
+          <i class="bi bi-headset"></i>
+          <div>
+            <strong>24/7 Premium Support</strong>
+            <span>Concierge service, seven days a week</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+@if (showOrderModal && selectedOrder) {
+  <div class="orders-overlay" (click)="closeOrderModal()">
+    <div class="orders-modal" (click)="$event.stopPropagation()">
+      <div class="orders-modal__head">
+        <div>
+          <h5 class="orders-modal__title">
+            <i class="bi bi-receipt"></i> #{{ selectedOrder.invoice_number }}
+          </h5>
+          <span class="orders-badge mt-2" [style.background]="statusBg(selectedOrder.status)" [style.color]="statusColor(selectedOrder.status)">
+            {{ selectedOrder.status }}
+          </span>
+        </div>
+        <button class="orders-modal__close" (click)="closeOrderModal()"><i class="bi bi-x-lg"></i></button>
+      </div>
+
+      <div class="orders-modal__body">
+        <div class="orders-meta">
+          <div class="orders-meta__item">
+            <i class="bi bi-calendar3"></i>
+            <span>{{ selectedOrder.sale_date | date: 'MMM dd, yyyy' }}</span>
+          </div>
+          <div class="orders-meta__item">
+            <i class="bi bi-box-seam"></i>
+            <span>{{ selectedOrder.items.length }} item{{ selectedOrder.items.length !== 1 ? 's' : '' }}</span>
+          </div>
+        </div>
+
+        <div class="orders-modal__section">
+          <div class="orders-modal__section-label">Items</div>
+          <div class="orders-modal__items">
+            @for (item of selectedOrder.items; track item.product_id) {
+              <div class="orders-modal__item">
+                <div>
+                  <div class="orders-modal__item-name">{{ item.product_name }}</div>
+                  <div class="orders-modal__item-meta">{{ item.quantity }} × ₹{{ item.unit_price }}</div>
+                </div>
+                <div class="orders-modal__item-right">
+                  @if (item.discount_amount > 0) {
+                    <span class="orders-modal__discount">-₹{{ item.discount_amount }}</span>
+                  }
+                  <span class="orders-modal__total">₹{{ item.total_price }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="orders-modal__section">
+          <div class="orders-modal__section-label">Summary</div>
+          <div class="orders-modal__rows">
+            <div class="orders-modal__row"><span>Subtotal</span><span>₹{{ selectedOrder.subtotal.toFixed(2) }}</span></div>
+            @if (selectedOrder.discount_amount > 0) {
+              <div class="orders-modal__row orders-modal__row--green"><span>Discount</span><span>-₹{{ selectedOrder.discount_amount.toFixed(2) }}</span></div>
+            }
+            @if (selectedOrder.tax_amount > 0) {
+              <div class="orders-modal__row"><span>GST</span><span>+₹{{ selectedOrder.tax_amount.toFixed(2) }}</span></div>
+            }
+            <div class="orders-modal__row"><span>Delivery</span><span>₹{{ selectedOrder.shipping_charge.toFixed(2) }}</span></div>
+            <div class="orders-modal__divider"></div>
+            <div class="orders-modal__row orders-modal__row--grand"><span>Total</span><span>₹{{ selectedOrder.total_amount.toFixed(2) }}</span></div>
+          </div>
+        </div>
+
+        <div class="orders-modal__section">
+          <div class="orders-modal__section-label">Payment</div>
+          <div class="orders-modal__payment">
+            <i class="bi bi-credit-card"></i>
+            <span>{{ selectedOrder.payment_status }}</span>
+          </div>
+        </div>
+
+        <div class="orders-modal__section">
+          <div class="orders-modal__section-label">Order Status</div>
+          <div class="orders-timeline">
+            @for (step of getStatusSteps(selectedOrder.status); track step.label) {
+              <div class="orders-timeline__step" [class.passed]="step.passed" [class.active]="step.active">
+                <div class="orders-timeline__dot">
+                  <i class="bi" [class.bi-check-circle-fill]="step.passed || step.active" [class.bi-circle]="!step.passed && !step.active"></i>
+                </div>
+                <span class="orders-timeline__label">{{ step.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="orders-modal__foot">
+        <button class="orders-modal__btn orders-modal__btn--cancel" (click)="closeOrderModal()">Close</button>
+        @if (canCancel) {
+          <button class="orders-modal__btn orders-modal__btn--danger" (click)="cancelFromModal()">
+            <i class="bi bi-x-circle me-1"></i>Cancel Order
+          </button>
+        }
+        <button class="orders-modal__btn orders-modal__btn--primary" (click)="viewOrRequestReturn(selectedOrder, selectedOrder.items[0])">
+          <i class="bi bi-arrow-return-left me-1"></i>Request Return
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Edit Profile Modal -->
+@if (showModal) {
+  <div class="orders-overlay" (click)="closeEditModal()">
+    <div class="orders-modal" (click)="$event.stopPropagation()">
+      <div class="orders-modal__head">
+        <h5 class="orders-modal__title"><i class="bi bi-person-gear me-2"></i>Edit Profile</h5>
+        <button class="orders-modal__close" (click)="closeEditModal()"><i class="bi bi-x-lg"></i></button>
+      </div>
+      <div class="orders-modal__body">
+        <div class="orders-field"><label>Full Name</label><input type="text" [(ngModel)]="formData.name" placeholder="Your name" /></div>
+        <div class="orders-field"><label>Email</label><input type="email" [(ngModel)]="formData.email" placeholder="Your email" /></div>
+        <div class="orders-field"><label>Phone Number</label><input type="text" [(ngModel)]="formData.phone" placeholder="Your phone" /></div>
+        <div class="orders-field"><label>Address</label><input type="text" [(ngModel)]="formData.address" placeholder="Your address" /></div>
+        <div class="row g-3">
+          <div class="col-6"><div class="orders-field"><label>City</label><input type="text" [(ngModel)]="formData.city" placeholder="City" /></div></div>
+          <div class="col-6"><div class="orders-field"><label>State</label><input type="text" [(ngModel)]="formData.state" placeholder="State" /></div></div>
+        </div>
+      </div>
+      <div class="orders-modal__foot">
+        <button class="orders-modal__btn orders-modal__btn--cancel" (click)="closeEditModal()">Cancel</button>
+        <button class="orders-modal__btn orders-modal__btn--primary" (click)="saveProfile()"><i class="bi bi-check-lg me-1"></i>Save Changes</button>
+      </div>
+    </div>
+  </div>
+}
+
+<app-footer></app-footer>

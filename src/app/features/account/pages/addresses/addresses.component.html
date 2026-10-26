@@ -1,0 +1,82 @@
+<app-header></app-header>
+
+<div class="addresses-page">
+  <div class="lux-container">
+
+    <div class="addresses-page__head">
+      <div>
+        <span class="lux-label">Your Account</span>
+        <h1 class="lux-heading addresses-page__title">Address Book</h1>
+      </div>
+      <button class="btn btn-outline-dark addresses-page__add-btn" (click)="openNew()" [disabled]="addresses.length >= 5">
+        <i class="bi bi-plus-lg me-1"></i>Add Address
+      </button>
+    </div>
+
+    @if (addresses.length === 0 && !showForm) {
+      <div class="addresses-page__empty">
+        <i class="bi bi-map addresses-page__empty-icon"></i>
+        <p>No addresses saved yet.</p>
+      </div>
+    }
+
+    <div class="addresses-page__grid">
+      @for (addr of addresses; track addr._id) {
+        <article class="address-card">
+          <div class="address-card__top">
+            <h3 class="address-card__name">{{ addr.name }}</h3>
+            <span class="address-card__type">{{ addr.addressType }}</span>
+          </div>
+          <p class="address-card__phone">{{ addr.phone }}</p>
+          <p class="address-card__lines">{{ addr.fullAddress }}, {{ addr.city }}, {{ addr.state }}</p>
+          <div class="address-card__actions">
+            <button class="address-card__action" (click)="openEdit(addr)"><i class="bi bi-pencil me-1"></i>Edit</button>
+            <button class="address-card__action address-card__action--danger" (click)="remove(addr._id!)"><i class="bi bi-trash me-1"></i>Remove</button>
+          </div>
+        </article>
+      }
+    </div>
+
+    @if (showForm) {
+      <div class="address-form">
+        <span class="lux-label address-form__caption">{{ editingId ? 'Edit' : 'New' }} Address</span>
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label class="address-form__label">Full Name</label>
+            <input class="address-form__input" [(ngModel)]="form.name" />
+          </div>
+          <div class="col-md-6">
+            <label class="address-form__label">Phone</label>
+            <input class="address-form__input" [(ngModel)]="form.phone" />
+          </div>
+          <div class="col-12">
+            <label class="address-form__label">Full Address</label>
+            <input class="address-form__input" [(ngModel)]="form.fullAddress" />
+          </div>
+          <div class="col-md-4">
+            <label class="address-form__label">City</label>
+            <input class="address-form__input" [(ngModel)]="form.city" />
+          </div>
+          <div class="col-md-4">
+            <label class="address-form__label">State</label>
+            <input class="address-form__input" [(ngModel)]="form.state" />
+          </div>
+          <div class="col-md-4">
+            <label class="address-form__label">Type</label>
+            <select class="address-form__input address-form__select" [(ngModel)]="form.addressType">
+              <option>Home</option>
+              <option>Work</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="col-12 address-form__actions">
+            <button class="btn btn-primary" (click)="save()">Save</button>
+            <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<app-footer></app-footer>

@@ -1,0 +1,77 @@
+// Remaps every Bootstrap button variant onto the BOLD editorial language:
+// rectangular, uppercase, letter-spaced, hairline or ink-filled.
+// Destructive actions (btn-danger / btn-outline-danger) keep red on purpose.
+
+.btn {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: var(--track-nav);
+  border-radius: 0;
+  padding: 0.85rem 2rem;
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+}
+
+.btn-sm {
+  padding: 0.55rem 1.25rem;
+  font-size: 0.7rem;
+}
+
+.btn-lg {
+  padding: 1.05rem 2.75rem;
+  font-size: 0.82rem;
+}
+
+// Primary actions — ink fill, brass on hover
+.btn-primary,
+.btn-warning,
+.btn-success {
+  background-color: var(--ink);
+  border-color: var(--ink);
+  color: var(--text-on-brand);
+}
+
+.btn-primary:hover,
+.btn-warning:hover,
+.btn-success:hover {
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  color: var(--text-on-brand);
+}
+
+// Secondary / outline actions — hairline ink, fills on hover
+.btn-outline,
+.btn-outline-secondary,
+.btn-outline-dark,
+.btn-outline-primary,
+.btn-outline-info {
+  background: transparent;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.btn-outline:hover,
+.btn-outline-secondary:hover,
+.btn-outline-dark:hover,
+.btn-outline-primary:hover,
+.btn-outline-info:hover {
+  background-color: var(--ink);
+  border-color: var(--ink);
+  color: var(--text-on-brand);
+}
+
+// Low-emphasis actions (Cancel / Close)
+.btn-ghost,
+.btn-secondary {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover,
+.btn-secondary:hover {
+  background: var(--brand-light);
+  border-color: transparent;
+  color: var(--text-primary);
+}

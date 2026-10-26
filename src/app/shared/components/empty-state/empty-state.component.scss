@@ -1,0 +1,36 @@
+// BOLD — Maison de Bain · Empty state
+// Centered, thin brass icon, serif title, quiet hairline-link action.
+
+.empty-state {
+  text-align: center;
+  padding: clamp(64px, 9vw, 110px) 24px;
+  font-family: var(--font-body);
+}
+
+.empty-state__icon {
+  display: block;
+  font-size: 2.6rem;
+  color: var(--brand-primary);
+  margin-bottom: 24px;
+}
+
+.empty-state__title {
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--ink);
+  margin: 0 0 10px;
+}
+
+.empty-state__message {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 42ch;
+  margin: 0 auto 32px;
+}
+
+.empty-state__action {
+  display: inline-flex;
+}

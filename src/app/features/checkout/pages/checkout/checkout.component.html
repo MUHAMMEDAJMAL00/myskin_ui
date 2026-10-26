@@ -1,0 +1,179 @@
+<app-header></app-header>
+
+<div class="checkout-page">
+  <div class="checkout-page__head">
+    <span class="lux-label">The Acquisition</span>
+    <h1 class="lux-heading">Checkout</h1>
+  </div>
+
+  <div class="checkout-page__inner">
+
+    <div class="checkout-page__left">
+
+      <!-- Delivery Address -->
+      <div class="checkout-card">
+        <div class="checkout-card__header">
+          <h4 class="checkout-card__title"><i class="bi bi-geo-alt"></i> Delivery Address</h4>
+          <button class="checkout-card__add-btn" (click)="addNewAddress()">
+            <i class="bi" [class.bi-plus]="!showAddressForm" [class.bi-list]="showAddressForm"></i>
+            {{ showAddressForm ? 'Saved' : 'Add New' }}
+          </button>
+        </div>
+        <div class="checkout-card__body">
+
+          @if (!showAddressForm) {
+            <div class="checkout-addresses">
+              @for (address of savedAddresses; track address._id) {
+                <div class="checkout-address" [class.checkout-address--selected]="selectedAddressId === address._id">
+                  <div class="checkout-address__top">
+                    <label class="checkout-address__radio">
+                      <input type="radio" name="addr" [checked]="selectedAddressId === address._id" (change)="selectAddressOnly(address)" />
+                      <span class="checkout-address__type">{{ address.addressType }}</span>
+                    </label>
+                    <i class="bi bi-trash checkout-address__del" (click)="$event.stopPropagation(); deleteAddress(address._id!)"></i>
+                  </div>
+                  <div class="checkout-address__body" (click)="selectAddress(address)">
+                    <div class="checkout-address__name">{{ address.name }}</div>
+                    <div class="checkout-address__text">{{ address.fullAddress }}, {{ address.city }}</div>
+                    <div class="checkout-address__text checkout-address__phone">{{ address.phone }}</div>
+                  </div>
+                </div>
+              } @empty {
+                <p class="checkout-empty">No saved addresses. Click "Add New" to add one.</p>
+              }
+            </div>
+          }
+
+          @if (showAddressForm) {
+            <div class="checkout-form">
+              <div class="checkout-form__row">
+                <div class="checkout-form__group">
+                  <label>Full Name</label>
+                  <input [(ngModel)]="formData.name" name="name" [disabled]="viewOnly" placeholder="Your full name" />
+                </div>
+                <div class="checkout-form__group">
+                  <label>Phone</label>
+                  <input [(ngModel)]="formData.phone" name="phone" [disabled]="viewOnly" placeholder="Phone number" />
+                </div>
+              </div>
+              <div class="checkout-form__group">
+                <label>Full Address</label>
+                <textarea rows="2" [(ngModel)]="formData.fullAddress" name="fullAddress" [disabled]="viewOnly" placeholder="Street, area, landmark"></textarea>
+              </div>
+              <div class="checkout-form__row">
+                <div class="checkout-form__group">
+                  <label>City</label>
+                  <input [(ngModel)]="formData.city" name="city" [disabled]="viewOnly" placeholder="City" />
+                </div>
+                <div class="checkout-form__group">
+                  <label>State</label>
+                  <input [(ngModel)]="formData.state" name="state" [disabled]="viewOnly" placeholder="State" />
+                </div>
+              </div>
+              <div class="checkout-form__actions">
+                @if (viewOnly) {
+                  <button class="btn btn-outline-secondary btn-sm" (click)="cancelForm()">Close</button>
+                } @else {
+                  <button class="btn btn-outline-secondary btn-sm" (click)="cancelForm()">Cancel</button>
+                  <button class="btn btn-primary btn-sm" (click)="saveAddress()"><i class="bi bi-check-lg me-1"></i>Save</button>
+                }
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+
+      <!-- Payment Method -->
+      <div class="checkout-card">
+        <div class="checkout-card__header">
+          <h4 class="checkout-card__title"><i class="bi bi-credit-card"></i> Payment Method</h4>
+        </div>
+        <div class="checkout-card__body">
+          <div class="checkout-payments">
+            @for (method of paymentMethods; track method) {
+              <div class="checkout-payment" [class.checkout-payment--selected]="formData.paymentMethod === method" (click)="setPaymentMethod(method)">
+                <input type="radio" name="payment" [checked]="formData.paymentMethod === method" />
+                <i class="bi" [ngClass]="{
+                  'bi-wallet2': method === 'Pay Online',
+                  'bi-cash': method === 'Cash On Delivery (COD)',
+                  'bi-shop': method === 'Pick From Shop',
+                  'bi-bank': method === 'Bank Transfer'
+                }"></i>
+                <span>{{ method }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="checkout-page__right">
+
+      <div class="checkout-summary">
+        <div class="checkout-summary__head">
+          <span class="checkout-summary__title"><i class="bi bi-receipt"></i> Summary</span>
+          <span class="checkout-summary__count">{{ lineItems.length }} item{{ lineItems.length !== 1 ? 's' : '' }}</span>
+        </div>
+
+        <div class="checkout-summary__items">
+          @for (item of lineItems; track item.productId) {
+            <div class="checkout-summary__item">
+              <img [src]="item.image | imageUrl" [alt]="item.name" class="checkout-summary__img" />
+              <div class="checkout-summary__info">
+                <div class="checkout-summary__name">{{ item.name }}</div>
+                <div class="checkout-summary__qty">{{ item.qty }} × ₹{{ (item.price / item.qty) | number:'1.2-2' }}</div>
+              </div>
+              <div class="checkout-summary__price">₹{{ item.price | number:'1.2-2' }}</div>
+            </div>
+          }
+        </div>
+
+        <div class="checkout-summary__coupon">
+          <input class="checkout-summary__coupon-input" placeholder="Coupon code" [(ngModel)]="couponCode" [disabled]="couponApplied" />
+          <button class="checkout-summary__coupon-btn" (click)="applyCoupon()" [disabled]="!couponCode || couponApplied">{{ couponApplied ? 'Applied' : 'Apply' }}</button>
+        </div>
+        @if (couponMessage) {
+          <p class="checkout-summary__coupon-msg" [class.is-success]="couponSuccess" [class.is-error]="!couponSuccess">{{ couponMessage }}</p>
+        }
+
+        <div class="checkout-summary__totals">
+          <div class="checkout-summary__row">
+            <span>Subtotal</span>
+            <span>₹{{ subtotal | number:'1.2-2' }}</span>
+          </div>
+          @if (discountTotal > 0) {
+            <div class="checkout-summary__row checkout-summary__row--green">
+              <span>Discount</span>
+              <span>-₹{{ discountTotal | number:'1.2-2' }}</span>
+            </div>
+          }
+          @if (taxTotal > 0) {
+            <div class="checkout-summary__row">
+              <span>GST</span>
+              <span>+₹{{ taxTotal | number:'1.2-2' }}</span>
+            </div>
+          }
+          <div class="checkout-summary__row">
+            <span>Delivery</span>
+            <span>₹{{ deliveryCharges | number:'1.2-2' }}</span>
+          </div>
+          <div class="checkout-summary__divider"></div>
+          <div class="checkout-summary__row checkout-summary__row--total">
+            <span>Total</span>
+            <span>₹{{ grandTotal | number:'1.2-2' }}</span>
+          </div>
+        </div>
+
+        <button class="checkout-summary__place" (click)="placeOrder()">
+          Place Order <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<app-footer></app-footer>

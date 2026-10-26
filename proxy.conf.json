@@ -1,0 +1,8 @@
+{
+  "/api/*": {
+    "target": "https://pos-api.codmentor.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

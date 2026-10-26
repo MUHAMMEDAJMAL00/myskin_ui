@@ -1,0 +1,268 @@
+// ============================================================
+// Returns — BOLD Maison de Bain · luxury editorial light theme
+// ============================================================
+
+.return-page {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 170px 0 110px;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    padding: 140px 0 70px;
+    width: calc(100% - 32px);
+  }
+}
+
+.return-page--empty {
+  text-align: center;
+
+  .lux-heading {
+    margin-top: 14px;
+  }
+
+  .lux-label::after {
+    content: '';
+    width: 34px;
+    height: 1px;
+    background: var(--brand-primary);
+  }
+
+  .btn {
+    margin-top: 8px;
+  }
+}
+
+.return-page__empty-text {
+  font-size: 0.85rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 20px 0 28px;
+}
+
+/* ── Page head ───────────────────────────────── */
+.return-page__head {
+  padding-bottom: 36px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid var(--hairline);
+
+  .lux-heading {
+    margin-top: 14px;
+  }
+}
+
+/* ── Product card ────────────────────────────── */
+.return-page__card {
+  display: flex;
+  align-items: stretch;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.return-page__media {
+  flex: 0 0 44%;
+  min-height: 420px;
+
+  @media (max-width: 768px) {
+    min-height: 300px;
+  }
+}
+
+.return-page__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.return-page__details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 56px 64px;
+
+  @media (max-width: 992px) {
+    padding: 40px 32px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 32px 24px;
+  }
+}
+
+.return-page__name {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 0 0 28px;
+}
+
+.return-page__meta {
+  border-top: 1px solid var(--border-light);
+}
+
+.return-page__meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.return-page__meta-label {
+  font-size: 0.62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.return-page__meta-value {
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  text-align: right;
+  word-break: break-word;
+}
+
+.return-page__return-btn {
+  align-self: flex-start;
+  margin-top: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Modal ───────────────────────────────────── */
+.return-page__modal-backdrop {
+  display: flex;
+  background-color: rgba(25, 24, 23, 0.45);
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.return-page__modal-backdrop .modal-dialog {
+  width: 100%;
+  max-width: 480px;
+  margin: 0;
+}
+
+.return-page__modal-backdrop .modal-content {
+  border: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-lg);
+}
+
+.return-page__modal-backdrop .modal-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0;
+}
+
+.return-page__modal-backdrop .modal-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.return-page__modal-backdrop .modal-body {
+  padding: 28px 32px;
+}
+
+.return-page__modal-meta {
+  border-top: 1px solid var(--border-light);
+  margin-bottom: 24px;
+
+  .return-page__meta-row {
+    padding: 12px 0;
+  }
+}
+
+.return-page__form-label {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--track-label);
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.return-page__modal-backdrop .form-check {
+  padding-left: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.return-page__modal-backdrop .form-check-input {
+  float: none;
+  margin: 0;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border: 1px solid var(--hairline);
+  accent-color: var(--ink);
+  border-radius: 50%;
+  box-shadow: none;
+
+  &:checked {
+    background-color: var(--ink);
+    border-color: var(--ink);
+  }
+
+  &:focus {
+    box-shadow: none;
+    border-color: var(--brand-primary);
+  }
+}
+
+.return-page__modal-backdrop .form-check-label {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.return-page__modal-backdrop .form-control {
+  border: 1px solid var(--hairline);
+  border-radius: 0;
+  background: var(--bg-card);
+  padding: 12px 16px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.7;
+
+  &::placeholder {
+    color: var(--text-muted);
+  }
+
+  &:focus {
+    border-color: var(--brand-primary);
+    box-shadow: none;
+    outline: none;
+  }
+}
+
+.return-page__modal-backdrop .modal-footer {
+  padding: 20px 32px 28px;
+  border-top: 1px solid var(--border-light);
+  border-radius: 0;
+  gap: 12px;
+}

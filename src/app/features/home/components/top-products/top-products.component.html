@@ -1,0 +1,13 @@
+@if (loading) {
+  <div class="edit-grid">
+    @for (skeleton of skeletonItems; track $index) {
+      <app-skeleton variant="card" height="380px"></app-skeleton>
+    }
+  </div>
+} @else {
+  <div class="edit-grid">
+    @for (product of products; track product.id) {
+      <app-product-card [product]="product"></app-product-card>
+    }
+  </div>
+}

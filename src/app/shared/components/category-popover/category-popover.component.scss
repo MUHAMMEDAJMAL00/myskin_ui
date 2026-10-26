@@ -1,0 +1,35 @@
+.category-popover {
+  min-width: 320px;
+  max-width: 420px;
+}
+
+.category-popover__link {
+  display: block;
+  text-decoration: none;
+  color: #000;
+}
+
+.category-popover__text {
+  padding: 6px 4px;
+  font-size: 14px;
+
+  &:hover {
+    color: var(--brand-primary);
+  }
+}
+
+.category-popover__promo {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.category-popover__promo-image {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+.category-popover__promo-text {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #666;
+}

@@ -1,0 +1,136 @@
+<app-header></app-header>
+
+<div class="cart-page">
+  <div class="cart-page__head">
+    <div>
+      <span class="cart-page__label">Your Selection</span>
+      <h1 class="cart-page__title">The <em>Cart</em></h1>
+      <p class="cart-page__count">{{ cartCount }} Item{{ cartCount === 1 ? '' : 's' }}</p>
+    </div>
+    @if (cartItems.length > 0) {
+      <button class="cart-page__clear" (click)="removeAll()">
+        <i class="bi bi-trash"></i> Remove All
+      </button>
+    }
+  </div>
+
+  @if (cartItems.length === 0) {
+    <app-empty-state
+      icon="cart"
+      title="Your cart is empty"
+      message="Looks like you haven't added anything yet."
+      actionLabel="Continue Shopping"
+      actionLink="/"
+    ></app-empty-state>
+  } @else {
+    <div class="cart-layout">
+
+      <!-- Left: Cart Items -->
+      <div class="cart-items">
+        <div class="cart-items__card">
+          <!-- Table Header -->
+          <div class="cart-items__header">
+            <span class="cart-items__th">Product</span>
+            <span class="cart-items__th">Price</span>
+            <span class="cart-items__th">Quantity</span>
+            <span class="cart-items__th">Subtotal</span>
+          </div>
+
+          @for (item of cartItems; track item._id) {
+            <div class="cart-item">
+              <div class="cart-item__main">
+                <div class="cart-item__media">
+                  <img [src]="item.product.image_url | imageUrl" [alt]="item.product.name" class="cart-item__img" />
+                </div>
+                <div class="cart-item__info">
+                  <span class="cart-item__brand">BOLD</span>
+                  <h3 class="cart-item__name">{{ item.product.name }}</h3>
+                  @if (item.variantName) {
+                    <span class="cart-item__variant">{{ item.variantName }}</span>
+                  }
+                  <span class="cart-item__stock">In Stock</span>
+                </div>
+              </div>
+               <span class="cart-item__price">₹{{ item.product.selling_price }}</span>
+              <div class="cart-item__qty">
+                <button (click)="decrement(item)" [disabled]="item.quantity <= 1"><i class="bi bi-dash"></i></button>
+                <input type="text" readonly [value]="item.quantity" />
+                <button (click)="increment(item)"><i class="bi bi-plus"></i></button>
+              </div>
+              <button class="cart-item__remove" (click)="removeItem(item)"><i class="bi bi-x-lg"></i></button>
+            </div>
+          }
+        </div>
+
+        <div class="cart-features">
+          <div class="cart-feature">
+            <i class="bi bi-truck"></i>
+            <div>
+              <h4 class="cart-feature__title">Free Shipping</h4>
+              <p class="cart-feature__desc">Complimentary delivery across the Emirates.</p>
+            </div>
+          </div>
+          <div class="cart-feature">
+            <i class="bi bi-shield-check"></i>
+            <div>
+              <h4 class="cart-feature__title">Secure Payment</h4>
+              <p class="cart-feature__desc">Encrypted checkout with trusted gateways.</p>
+            </div>
+          </div>
+          <div class="cart-feature">
+            <i class="bi bi-gem"></i>
+            <div>
+              <h4 class="cart-feature__title">Premium Quality</h4>
+              <p class="cart-feature__desc">Every piece curated for enduring beauty.</p>
+            </div>
+          </div>
+          <div class="cart-feature">
+            <i class="bi bi-chat-dots"></i>
+            <div>
+              <h4 class="cart-feature__title">Dedicated Support</h4>
+              <p class="cart-feature__desc">Concierge service, seven days a week.</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="cart-continue" routerLink="/">
+          <i class="bi bi-arrow-left"></i> Continue Shopping
+        </button>
+
+        <p class="cart-note">The price and availability of items are subject to change. The cart is a temporary place to store a list of your items and reflects each item's most recent price.</p>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <aside class="cart-summary">
+        <h2 class="cart-summary__title">Order Summary</h2>
+        <div class="cart-summary__divider"></div>
+        <div class="cart-summary__row">
+          <span>Subtotal</span>
+          <span>₹ {{ totalPrice }}</span>
+        </div>
+        <div class="cart-summary__row">
+          <span>Discount</span>
+          <span>₹ 0.00</span>
+        </div>
+        <div class="cart-summary__row">
+          <span>Tax</span>
+          <span>₹ 0.00</span>
+        </div>
+        <div class="cart-summary__row">
+          <span>Shipping</span>
+          <span>₹ 0.00</span>
+        </div>
+        <div class="cart-summary__divider"></div>
+        <div class="cart-summary__total">
+          <span>Grand Total</span>
+          <span>₹ {{ totalPrice }}</span>
+        </div>
+        <a routerLink="/checkout" class="cart-summary__btn">
+          Checkout <i class="bi bi-arrow-right"></i>
+        </a>
+      </aside>
+    </div>
+  }
+</div>
+
+<app-footer></app-footer>

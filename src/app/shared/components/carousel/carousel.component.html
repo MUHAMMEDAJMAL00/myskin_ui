@@ -1,0 +1,44 @@
+<div
+  class="app-carousel slick-slider slick-initialized"
+  [class.app-carousel--with-dots]="config.dots"
+  [class.app-carousel--3d]="config.effect3d"
+>
+  @if (config.arrows) {
+    <button type="button" class="slick-arrow slick-prev" (click)="prev()" aria-label="Previous">Previous</button>
+  }
+
+  <div class="slick-list" [class.slick-list--3d]="config.effect3d">
+    <div
+      class="slick-track app-carousel__track"
+      [class.app-carousel__track--3d]="config.effect3d"
+      [style.transform]="trackTransform"
+    >
+      @for (item of items; track $index) {
+        <div
+          class="slick-slide app-carousel__slide"
+          [class.app-carousel__slide--3d]="config.effect3d"
+          [class.app-carousel__slide--active-3d]="config.effect3d && $index === currentIndex"
+          [class.app-carousel__slide--prev-3d]="config.effect3d && ($index === prevIndex)"
+          [style.width.%]="slideWidthPercent"
+          [style.padding]="'0 ' + gutter + 'px'"
+        >
+          <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item, index: $index }"></ng-container>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (config.arrows) {
+    <button type="button" class="slick-arrow slick-next" (click)="next()" aria-label="Next">Next</button>
+  }
+
+  @if (config.dots) {
+    <ul class="slick-dots">
+      @for (dot of dots; track dot) {
+        <li [class.slick-active]="activeDot === dot">
+          <button type="button" (click)="goToDot(dot)" aria-label="Go to slide">{{ dot + 1 }}</button>
+        </li>
+      }
+    </ul>
+  }
+</div>
