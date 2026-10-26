@@ -1,54 +1,55 @@
-// Remaps every Bootstrap button variant onto the BOLD editorial language:
-// rectangular, uppercase, letter-spaced, hairline or ink-filled.
+// Remaps every Bootstrap button variant onto the MySkin language:
+// rounded pills, crimson fills, blush outlines.
 // Destructive actions (btn-danger / btn-outline-danger) keep red on purpose.
 
 .btn {
   font-family: var(--font-body);
   font-weight: 500;
-  font-size: 0.78rem;
-  text-transform: uppercase;
+  font-size: 0.85rem;
   letter-spacing: var(--track-nav);
-  border-radius: 0;
-  padding: 0.85rem 2rem;
-  transition: background-color var(--transition), border-color var(--transition), color var(--transition);
+  border-radius: var(--radius-full);
+  padding: 0.7rem 1.75rem;
+  transition: background-color var(--transition), border-color var(--transition), color var(--transition),
+    box-shadow var(--transition);
 }
 
 .btn-sm {
-  padding: 0.55rem 1.25rem;
-  font-size: 0.7rem;
+  padding: 0.45rem 1.1rem;
+  font-size: 0.78rem;
 }
 
 .btn-lg {
-  padding: 1.05rem 2.75rem;
-  font-size: 0.82rem;
+  padding: 0.9rem 2.4rem;
+  font-size: 0.95rem;
 }
 
-// Primary actions — ink fill, brass on hover
+// Primary actions — crimson fill
 .btn-primary,
 .btn-warning,
 .btn-success {
-  background-color: var(--ink);
-  border-color: var(--ink);
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
   color: var(--text-on-brand);
 }
 
 .btn-primary:hover,
 .btn-warning:hover,
 .btn-success:hover {
-  background-color: var(--brand-primary);
-  border-color: var(--brand-primary);
+  background-color: var(--brand-dark);
+  border-color: var(--brand-dark);
   color: var(--text-on-brand);
+  box-shadow: var(--shadow);
 }
 
-// Secondary / outline actions — hairline ink, fills on hover
+// Secondary / outline actions — crimson outline, fills on hover
 .btn-outline,
 .btn-outline-secondary,
 .btn-outline-dark,
 .btn-outline-primary,
 .btn-outline-info {
   background: transparent;
-  border-color: var(--ink);
-  color: var(--ink);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
 }
 
 .btn-outline:hover,
@@ -56,8 +57,8 @@
 .btn-outline-dark:hover,
 .btn-outline-primary:hover,
 .btn-outline-info:hover {
-  background-color: var(--ink);
-  border-color: var(--ink);
+  background-color: var(--brand-primary);
+  border-color: var(--brand-primary);
   color: var(--text-on-brand);
 }
 

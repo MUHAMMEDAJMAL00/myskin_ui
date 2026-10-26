@@ -38,7 +38,7 @@
   position: relative;
   background:
     linear-gradient(135deg, rgba(247, 244, 239, 0.55), rgba(236, 228, 212, 0.45)),
-    url('/assets/bold/about-img.jpeg') center / cover no-repeat;
+    url('https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=1800&q=80&auto=format&fit=crop') center / cover no-repeat;
 
   .lux-label {
     margin-bottom: 18px;
@@ -90,7 +90,7 @@
 
   &--bg {
     position: relative;
-    background: url('/assets/bold/about-last.jpeg') center / cover no-repeat fixed;
+    background: url('https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=1800&q=80&auto=format&fit=crop') center / cover no-repeat fixed;
     min-height: 400px;
     display: flex;
     align-items: center;

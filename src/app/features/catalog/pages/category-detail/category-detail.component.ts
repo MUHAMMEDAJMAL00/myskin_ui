@@ -47,7 +47,7 @@ export class CategoryDetailComponent implements OnInit {
     this.route.paramMap.subscribe((params) => {
       this.categoryId = Number(params.get('categoryId'));
       this.page = 1;
-      this.searchTerm = '';
+      this.searchTerm = this.route.snapshot.queryParamMap.get('search') || '';
       this.loadProducts();
     });
   }

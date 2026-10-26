@@ -1,60 +1,64 @@
 <footer class="app-footer">
-  <div class="app-footer__gold"></div>
   <div class="app-footer__inner">
-
-    <div class="app-footer__top">
-      <div class="app-footer__brand">
-        <div class="app-footer__wordmark">BOLD</div>
-        <div class="app-footer__tagline">Maison de Bain — Dubai</div>
-        <p class="app-footer__description">
-          Where comfort and luxury marry contemporary design. Bathware composed in Dubai for those who treat the everyday as ceremony.
-        </p>
-        <div class="app-footer__social">
-          <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-          <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
-          <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-          <a href="#" aria-label="Pinterest"><i class="bi bi-pinterest"></i></a>
-        </div>
-      </div>
-
-      <div class="app-footer__links">
-        <div class="app-footer__group">
-          <div class="app-footer__heading">Maison</div>
-          <a class="app-footer__item" routerLink="/about">Our Story</a>
-          <a class="app-footer__item" routerLink="/about">Design Democracy</a>
-          <a class="app-footer__item" href="mailto:info@mybold.com">Contact</a>
-        </div>
-
-        <div class="app-footer__group">
-          <div class="app-footer__heading">Client Care</div>
-          <a class="app-footer__item" routerLink="/my-orders">Orders</a>
-          <a class="app-footer__item" routerLink="/wishlist">Wishlist</a>
-          <a class="app-footer__item" href="mailto:info@mybold.com">Bulk Enquiries</a>
-        </div>
-
-        <div class="app-footer__group">
-          <div class="app-footer__heading">Legal</div>
-          <a class="app-footer__item">Privacy Policy</a>
-          <a class="app-footer__item">Shipping Policy</a>
-          <a class="app-footer__item">Terms of Service</a>
-        </div>
-      </div>
-
-      <div class="app-footer__newsletter">
-        <div class="app-footer__heading">The Edit</div>
-        <p class="app-footer__newsletter-text">Receive curated collections, new arrivals and maison stories.</p>
-        <form class="app-footer__form" (submit)="$event.preventDefault()">
-          <input type="email" placeholder="Your email" class="app-footer__input" />
-          <button type="submit" class="app-footer__submit" aria-label="Subscribe">
-            <i class="bi bi-arrow-right"></i>
-          </button>
-        </form>
+    <div class="app-footer__brand">
+      <div class="app-footer__wordmark">Myskin</div>
+      <div class="app-footer__tagline">Beauty for every you</div>
+      <p class="app-footer__text">Get the latest updates &amp; offers. Subscribe to our newsletter.</p>
+      <form class="app-footer__form" (submit)="subscribe(); $event.preventDefault()">
+        <input type="email" name="email" [(ngModel)]="email" placeholder="Your email address" />
+        <button type="submit">Subscribe</button>
+      </form>
+      <div class="app-footer__caption">Download the MySkin App</div>
+      <div class="app-footer__stores">
+        <a class="app-footer__store" href="https://www.apple.com/app-store/" target="_blank" rel="noopener">
+          <i class="bi bi-apple"></i>
+          <span><small>Download on the</small>App Store</span>
+        </a>
+        <a class="app-footer__store" href="https://play.google.com" target="_blank" rel="noopener">
+          <i class="bi bi-google-play"></i>
+          <span><small>Get it on</small>Google Play</span>
+        </a>
       </div>
     </div>
 
-    <div class="app-footer__bottom">
-      <span>&copy; 2026 Bold International FZCO, Dubai. All rights reserved.</span>
-      <span class="app-footer__credit">Crafted by <span>Bairuha Tech</span></span>
+    <div class="app-footer__group">
+      <div class="app-footer__heading">Help</div>
+      @for (link of helpLinks; track link) {
+        <a class="app-footer__item" routerLink="/my-orders">{{ link }}</a>
+      }
+    </div>
+
+    <div class="app-footer__group">
+      <div class="app-footer__heading">Explore</div>
+      <a class="app-footer__item" routerLink="/">New Arrivals</a>
+      @for (category of categories; track category.id) {
+        <a class="app-footer__item" [routerLink]="['/catalog', 'category', category.id]">{{ category.name }}</a>
+      }
+    </div>
+
+    <div class="app-footer__group">
+      <div class="app-footer__heading">Quick Links</div>
+      @for (link of quickLinks; track link) {
+        <a class="app-footer__item" routerLink="/about">{{ link }}</a>
+      }
+    </div>
+
+    <div class="app-footer__group">
+      <div class="app-footer__heading">Follow Us</div>
+      <div class="app-footer__social">
+        @for (social of socials; track social.label) {
+          <a [href]="social.url" target="_blank" rel="noopener" [attr.aria-label]="social.label">
+            <i class="bi" [ngClass]="social.icon"></i>
+          </a>
+        }
+      </div>
+      <div class="app-footer__heading app-footer__heading--spaced">My Account</div>
+      <a class="app-footer__item" routerLink="/my-orders">My Orders</a>
+      <a class="app-footer__item" routerLink="/wishlist">Wishlist</a>
+      <a class="app-footer__item" routerLink="/cart">Cart</a>
+      <a class="app-footer__item" routerLink="/login">Sign In</a>
     </div>
   </div>
+
+  <div class="app-footer__bottom">&copy; {{ year }} MySkin. All rights reserved.</div>
 </footer>

@@ -1,99 +1,90 @@
-<div class="app-header">
-  <div class="app-header__notice">
-    <span>Bold International FZCO — Dubai</span>
-    <span class="app-header__notice-sep"></span>
-    <span>Complimentary delivery across the Emirates</span>
+<header class="app-header">
+  <div class="app-header__topbar">
+    <div class="app-header__container app-header__topbar-inner">
+      <span class="app-header__promo">
+        <i class="bi bi-truck"></i>
+        Free Shipping on orders above ₹999
+      </span>
+      <div class="app-header__quick">
+        <a routerLink="/my-orders"><i class="bi bi-box-seam"></i> Track Order</a>
+        <span class="app-header__sep"></span>
+        <a (click)="auth.currentCustomer ? goToMyOrders() : goToLogin()">
+          <i class="bi bi-person"></i> {{ auth.currentCustomer ? 'Account' : 'Login / Sign Up' }}
+        </a>
+        <span class="app-header__sep"></span>
+        <a routerLink="/wishlist"><i class="bi bi-heart"></i> Wishlist</a>
+        <span class="app-header__sep"></span>
+        <a routerLink="/cart"><i class="bi bi-bag"></i> Cart ({{ cartCount }})</a>
+      </div>
+    </div>
   </div>
 
   <div class="app-header__bar">
-    <div class="app-header__left">
-      <button
-        type="button"
-        class="app-header__menu-icon"
-        aria-label="Open menu"
-        (click)="openMobileMenu(mobileMenu)"
-      >
+    <div class="app-header__container app-header__bar-inner">
+      <button type="button" class="app-header__menu-icon" aria-label="Open menu" (click)="openMobileMenu(mobileMenu)">
         <i class="bi bi-list"></i>
       </button>
 
+      <a class="app-header__brand" (click)="goToHome()">
+        <span class="app-header__wordmark">Myskin</span>
+        <span class="app-header__tagline">Beauty &amp; Skincare</span>
+      </a>
+
       <nav class="app-header__nav">
-        <a routerLink="/" class="app-header__nav-link">Home</a>
-
-        <div class="app-header__nav-group">
-          <span class="app-header__nav-link app-header__nav-link--parent">
-            Collections
-            <i class="bi bi-chevron-down"></i>
-          </span>
-          <div class="app-header__dropdown">
-            @for (master of topLevelCategories; track master.id) {
-              <a
-                class="app-header__dropdown-link"
-                [class.app-header__dropdown-link--active]="
-                  isCategoryActive(master.id)
-                "
-                (click)="navigateToCategory(master.id)"
-              >
-                {{ master.name }}
-              </a>
-            }
-          </div>
-        </div>
-
-        <a routerLink="/about" class="app-header__nav-link">About</a>
+        @for (item of navItems; track item.label) {
+          <a class="app-header__nav-link" [class.app-header__nav-link--active]="isNavActive(item)" (click)="navigate(item)">
+            {{ item.label }}
+          </a>
+        }
       </nav>
-    </div>
 
-    <div class="app-header__brand" (click)="goToHome()">
-      <span class="app-header__wordmark">BOLD</span>
-      <span class="app-header__tagline">Maison de Bain — Dubai</span>
-    </div>
+      <form class="app-header__search" (submit)="search(); $event.preventDefault()">
+        <i class="bi bi-search"></i>
+        <input type="search" name="q" [(ngModel)]="searchTerm" placeholder="Search for skincare, makeup, hair care..." />
+      </form>
 
-    <div class="app-header__actions">
-      <a routerLink="/wishlist" class="app-header__icon-link" title="Wishlist">
-        <i class="bi bi-heart"></i>
-        @if (wishlistCount > 0) {
-          <span class="app-header__badge">{{ wishlistCount }}</span>
-        }
-      </a>
-      <a routerLink="/cart" class="app-header__icon-link" title="Cart">
-        <i class="bi bi-cart3"></i>
-        @if (cartCount > 0) {
-          <span class="app-header__badge">{{ cartCount }}</span>
-        }
-      </a>
-      <button
-        type="button"
-        class="app-header__icon-link"
-        title="Account"
-        (click)="auth.currentCustomer ? goToMyOrders() : goToLogin()"
-      >
-        <i class="bi bi-person-circle"></i>
-      </button>
+      <div class="app-header__actions">
+        <a routerLink="/wishlist" class="app-header__icon-link" title="Wishlist">
+          <i class="bi bi-heart"></i>
+          @if (wishlistCount > 0) {
+            <span class="app-header__badge">{{ wishlistCount }}</span>
+          }
+        </a>
+        <a routerLink="/cart" class="app-header__icon-link" title="Cart">
+          <i class="bi bi-bag"></i>
+          @if (cartCount > 0) {
+            <span class="app-header__badge">{{ cartCount }}</span>
+          }
+        </a>
+        <button type="button" class="app-header__cta" (click)="auth.currentCustomer ? goToMyOrders() : goToLogin()">
+          <i class="bi bi-person"></i>
+          <span>{{ auth.currentCustomer ? 'Account' : 'Login' }}</span>
+        </button>
+      </div>
     </div>
   </div>
-</div>
+</header>
 
 <ng-template #mobileMenu let-offcanvas>
   <div class="offcanvas-header app-header__mobile-head">
     <div>
-      <div class="app-header__wordmark app-header__wordmark--sm">BOLD</div>
-      <div class="app-header__tagline">Maison de Bain</div>
+      <div class="app-header__wordmark">Myskin</div>
+      <div class="app-header__tagline">Beauty &amp; Skincare</div>
     </div>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="offcanvas.dismiss()"
-    ></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
   </div>
   <div class="offcanvas-body p-0">
-    <div class="app-header__mobile-caption">Collections</div>
+    <form class="app-header__search app-header__search--mobile" (submit)="search(offcanvas.dismiss); $event.preventDefault()">
+      <i class="bi bi-search"></i>
+      <input type="search" name="qm" [(ngModel)]="searchTerm" placeholder="Search products..." />
+    </form>
+    @for (item of navItems; track item.label) {
+      <div class="app-header__mobile-item" (click)="navigate(item, offcanvas.dismiss)">{{ item.label }}</div>
+    }
+    <div class="app-header__mobile-caption">Categories</div>
     @for (master of topLevelCategories; track master.id) {
       <div
         class="app-header__mobile-master"
-        [class.app-header__mobile-master--expanded]="
-          expandedCategoryId === master.id
-        "
         [class.app-header__mobile-master--active]="isCategoryActive(master.id)"
         (click)="
           childrenOf(master.id).length
@@ -103,23 +94,14 @@
       >
         <span>{{ master.name }}</span>
         @if (childrenOf(master.id).length) {
-          <i
-            class="bi"
-            [ngClass]="
-              expandedCategoryId === master.id
-                ? 'bi-chevron-up'
-                : 'bi-chevron-down'
-            "
-          ></i>
+          <i class="bi" [ngClass]="expandedCategoryId === master.id ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
         }
       </div>
       @if (expandedCategoryId === master.id) {
         @for (child of childrenOf(master.id); track child.id) {
           <div
             class="app-header__mobile-child"
-            [class.app-header__mobile-child--active]="
-              activeCategoryId === child.id
-            "
+            [class.app-header__mobile-child--active]="activeCategoryId === child.id"
             (click)="navigateToCategory(child.id, offcanvas.dismiss)"
           >
             {{ child.name }}
@@ -127,10 +109,5 @@
         }
       }
     }
-    <div
-      class="app-header__mobile-item"
-      (click)="navigateToAbout(offcanvas.dismiss)"
-    >
-      About</div>
   </div>
 </ng-template>

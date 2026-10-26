@@ -1,45 +1,9 @@
-/* Global styles for BOLD — Maison de Bain */
+/* Global styles for MySkin — Beauty & Skincare */
 
 @use './styles/tokens';
 @use './styles/buttons';
 
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@200;300;400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap');
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/assets/fonts/Satoshi-Regular.woff2') format('woff2'),
-       url('/assets/fonts/Satoshi-Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/assets/fonts/Satoshi-Medium.woff2') format('woff2'),
-       url('/assets/fonts/Satoshi-Medium.otf') format('opentype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/assets/fonts/Satoshi-SemiBold.woff2') format('woff2'),
-       url('/assets/fonts/Satoshi-SemiBold.otf') format('opentype');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Satoshi';
-  src: url('/assets/fonts/Satoshi-Bold.woff2') format('woff2'),
-       url('/assets/fonts/Satoshi-Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Great+Vibes&display=swap');
 
 html,
 body {

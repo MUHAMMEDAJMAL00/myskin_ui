@@ -1,122 +1,215 @@
 <app-header></app-header>
 
-<app-banner></app-banner>
-
-<div id="section-collections">
-  <app-categories-slider></app-categories-slider>
-</div>
-
-<!-- <section class="home-story">
-  <app-drip-canvas></app-drip-canvas>
-  <div class="home-story__veil"></div>
-  <div class="home-story__bg">
-    <img [src]="currentSpotlight.image" alt="" />
-  </div>
-  <div class="lux-container home-story__content">
-    <div class="home-story__body">
-      <span class="lux-label">{{ currentSpotlight.label }}</span>
-      <h2 class="lux-heading">
-        {{ currentSpotlight.title }}<br />
-        <em>{{ currentSpotlight.titleEm }}</em>
-      </h2>
-      <p class="home-story__copy">
-        {{ currentSpotlight.description }}
-      </p>
-      <p class="home-story__copy home-story__copy--quiet">
-        {{ currentSpotlight.note }}
-      </p>
-      <a [routerLink]="currentSpotlight.link" class="lux-link">
-        Discover the story
-        <i class="bi bi-arrow-right"></i>
-      </a>
+<main class="home">
+  <!-- Hero -->
+  <section class="ms-container hero-wrap">
+    <div class="hero">
+      @for (slide of heroSlides; track slide.title; let i = $index) {
+        <div class="hero__slide" [class.hero__slide--active]="i === heroIndex">
+          <div class="hero__copy">
+            <span class="hero__eyebrow">{{ slide.eyebrow }}</span>
+            <h1 class="hero__title">{{ slide.title }}<br />{{ slide.titleLine2 }}</h1>
+            <p class="hero__text">{{ slide.text }}</p>
+            <button type="button" class="ms-pill" (click)="open(slide)">{{ slide.cta }} <i class="bi bi-arrow-right"></i></button>
+          </div>
+          <img class="hero__model" [src]="slide.model" [alt]="slide.title" />
+          <span class="hero__script">{{ slide.script }}</span>
+          <img class="hero__products" [src]="slide.products" alt="" />
+        </div>
+      }
+      @if (heroSlides.length > 1) {
+        <div class="hero__dots">
+          @for (slide of heroSlides; track slide.title; let i = $index) {
+            <button type="button" [class.active]="i === heroIndex" (click)="goToSlide(i)" [attr.aria-label]="'Slide ' + (i + 1)"></button>
+          }
+        </div>
+      }
     </div>
-  </div>
-</section> -->
+  </section>
 
-<app-projects></app-projects>
+  <!-- Offer strips -->
+  <section class="ms-container offers">
+    @for (offer of offers; track offer.title) {
+      <div class="offer">
+        <span class="offer__icon" [class.offer__icon--badge]="offer.badge">
+          @if (offer.badge) { {{ offer.badge }} } @else { <i class="bi" [ngClass]="offer.icon"></i> }
+        </span>
+        <div>
+          <div class="offer__title">{{ offer.title }} <span>| {{ offer.highlight }}</span></div>
+          <div class="offer__note">{{ offer.note }}</div>
+        </div>
+      </div>
+    }
+  </section>
 
-<section class="home-quote">
-  <video
-    #quoteVideo
-    muted
-    loop
-    playsinline
-    preload="auto"
-    class="home-quote__bg"
-  >
-    <source src="assets/bold/prod-wave-counter-basin.mp4" type="video/mp4" />
-  </video>
-  <div class="home-quote__veil"></div>
-  <div class="home-quote__content">
-    <span class="lux-label">The Philosophy</span>
-    <p class="home-quote__text">
-      &ldquo;Comfort and luxury marry<br />contemporary and modern.&rdquo;
-    </p>
-    <span class="home-quote__sig">Design Democracy &mdash; Dubai</span>
-  </div>
-</section>
+  <!-- Shop by category -->
+  <section class="ms-container ms-section">
+    <div class="ms-head">
+      <h2 class="ms-title">Shop By Category</h2>
+      <a class="ms-viewall" (click)="viewAllCategories()">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="cats">
+      @for (cat of categories; track cat.name) {
+        <a class="cat" (click)="openCategory(cat)">
+          <span class="cat__img"><img [src]="cat.image" [alt]="cat.name" loading="lazy" /></span>
+          <span class="cat__name">{{ cat.name }}</span>
+        </a>
+      }
+    </div>
+  </section>
 
-<section class="home-care">
-  <div class="lux-container">
-    <div class="home-care__head">
+  <!-- Limited time deals -->
+  <section class="ms-container ms-section">
+    <div class="ms-head">
+      <h2 class="ms-title ms-title--caps">Limited Time Deals</h2>
+      <a class="ms-viewall" (click)="open({ anchor: 'value' })">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="deals">
+      @for (deal of deals; track deal.label) {
+        <a class="deal" [ngClass]="'deal--' + deal.style" (click)="open(deal)">
+          <div class="deal__copy">
+            <span class="deal__eyebrow">{{ deal.eyebrow }}</span>
+            <span class="deal__value">{{ deal.value }}</span>
+            <span class="deal__label">{{ deal.label }} <i class="bi bi-arrow-right"></i></span>
+          </div>
+          <img class="deal__img" [src]="deal.image" alt="" loading="lazy" />
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- Festive packs -->
+  <section class="ms-container ms-section">
+    <div class="ms-head">
+      <h2 class="ms-title">Dazzling Festive Packs</h2>
+      <a class="ms-viewall" (click)="open({ keywords: ['gift'] })">View All <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="packs">
+      @for (pack of packs; track pack.title) {
+        <div class="pack" [style.background]="'linear-gradient(180deg, #fff 0%, ' + pack.tint + ' 100%)'">
+          <div class="pack__title">{{ pack.title }}</div>
+          <div class="pack__sub">{{ pack.subtitle }}</div>
+          <img class="pack__img" [src]="pack.image" [alt]="pack.title" loading="lazy" />
+          <button type="button" class="ms-pill ms-pill--outline ms-pill--sm" (click)="open(pack)">Shop Now <i class="bi bi-arrow-right"></i></button>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Big brands -->
+  <section class="ms-section brands-band" id="brands">
+    <div class="ms-container">
+      <h2 class="ms-ribbon">Big Brands, Irresistible Prices</h2>
+      <div class="brands">
+        @for (brand of brands; track brand.name) {
+          <a class="brand" (click)="open(brand)">
+            <span class="brand__name">{{ brand.name }}</span>
+            <span class="brand__img"><img [src]="brand.image" [alt]="brand.name" loading="lazy" /></span>
+            <span class="brand__offer">{{ brand.offer }}</span>
+            <span class="brand__note">{{ brand.note }}</span>
+          </a>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Season's hottest offers -->
+  <section class="hot">
+    <div class="ms-container hot__inner">
       <div>
-        <span class="lux-label">The Care Collection</span>
-        <h2 class="lux-heading">Rituals, <em>bottled</em></h2>
+        <div class="hot__eyebrow">Season's</div>
+        <h2 class="hot__title">Hottest Offers</h2>
+        <div class="hot__sub">Up to 60% OFF</div>
+        <button type="button" class="ms-pill" (click)="open({ anchor: 'value' })">Shop Now</button>
       </div>
-      <p class="home-care__intro">
-        Shampoo, conditioner and shower rituals from the Maison — keratin, argan
-        and quiet gold, composed for the everyday ceremony.
-      </p>
+      <img class="hot__img" [src]="deals[2].image" alt="" loading="lazy" />
+    </div>
+  </section>
+
+  <!-- More beauty, better value -->
+  <section class="ms-container ms-section" id="value">
+    <h2 class="ms-ribbon">More Beauty, Better Value</h2>
+    <div class="values">
+      @for (item of valueItems; track $index) {
+        <a class="value" (click)="openValue(item)">
+          <span class="value__img"><img [src]="item.image" [alt]="item.name" loading="lazy" /></span>
+          <span class="value__name">{{ item.name }}</span>
+          <span class="value__price">{{ item.price }}</span>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- MySkin Luxe -->
+  <section class="luxe">
+    <div class="ms-container">
+      <h2 class="luxe__title">MySkin Luxe</h2>
+      <div class="luxe__sub">Feels luxe, stays luxe</div>
+      <div class="luxe__cards">
+        @for (card of luxeCards; track card.title) {
+          <a class="luxe-card" (click)="open(card)">
+            <img [src]="card.image" [alt]="card.title" loading="lazy" />
+            <div class="luxe-card__copy">
+              <strong>{{ card.title }}</strong>
+              <span>{{ card.subtitle }}</span>
+            </div>
+            <span class="luxe-card__btn">Shop Now <i class="bi bi-arrow-right"></i></span>
+          </a>
+        }
+      </div>
+      <div class="perks">
+        @for (perk of luxePerks; track perk.title) {
+          <div class="perk">
+            <i class="bi" [ngClass]="perk.icon"></i>
+            <strong>{{ perk.title }}</strong>
+            <span>{{ perk.note }}</span>
+          </div>
+        }
+      </div>
+      <div class="luxe__rewards">Live Beauty Rewards <span>|</span> Up to 40% OFF</div>
+    </div>
+  </section>
+
+  <!-- Spotlight stories -->
+  <section class="ms-container ms-section" id="community">
+    <h2 class="ms-ribbon">Spotlight Stories</h2>
+    <div class="stories">
+      @for (story of stories; track story.label) {
+        <button type="button" class="story" (click)="open(story)">{{ story.label }}</button>
+      }
     </div>
 
-    <div class="home-care__grid">
-      <div class="home-care__tile home-care__tile--wide lux-media">
-        <img
-          src="assets/bold/care-range.jpg"
-          alt="The BOLD International care collection"
-        />
+    <a class="trend" (click)="open(trending)">
+      <div class="trend__copy">
+        <div class="trend__title">{{ trending.title }}<br />{{ trending.subtitle }}</div>
+        <div class="trend__offer">{{ trending.offer }}</div>
       </div>
-      <div class="home-care__tile home-care__tile--video">
-        <video #careVideo muted loop playsinline preload="auto">
-          <source src="assets/bold/care-ritual.mp4" type="video/mp4" />
-        </video>
+      <div class="trend__imgs">
+        @for (img of trending.images; track img) {
+          <span><img [src]="img" alt="" loading="lazy" /></span>
+        }
       </div>
-      <div class="home-care__tile lux-media">
-        <img
-          src="assets/bold/care-shampoo.jpg"
-          alt="BOLD International shampoo"
-        />
-      </div>
-    </div>
-  </div>
-</section>
+    </a>
+  </section>
 
-<section
-  class="home-values"
-  #valuesSection
-  [class.home-values--visible]="valuesVisible"
->
-  <div class="home-values__bg">
-    <img src="assets/bold/home-bg.jpeg" alt="" />
-    <div class="home-values__veil"></div>
-  </div>
-  <div class="lux-container home-values__grid">
-    <div class="home-values__item">
-      <i class="bi bi-droplet"></i>
-      <div class="home-values__title">Water Conscious</div>
-      <p>Optimised consumption in every fitting, without compromise.</p>
+  <!-- Connect with us -->
+  <section class="connect">
+    <div class="connect__photos">
+      @for (photo of connectPhotos; track photo) {
+        <img [src]="photo" alt="" loading="lazy" />
+      }
     </div>
-    <div class="home-values__item">
-      <i class="bi bi-patch-check"></i>
-      <div class="home-values__title">Patented Innovation</div>
-      <p>World-first engineering, protected and perfected in Dubai.</p>
+    <div class="connect__overlay">
+      <h2 class="connect__title">Connect With Us</h2>
+      <div class="connect__icons">
+        @for (social of socials; track social.label) {
+          <a [href]="social.url" target="_blank" rel="noopener" [attr.aria-label]="social.label">
+            <i class="bi" [ngClass]="social.icon"></i>
+          </a>
+        }
+      </div>
     </div>
-    <div class="home-values__item">
-      <i class="bi bi-gem"></i>
-      <div class="home-values__title">Uncompromising Craft</div>
-      <p>The finest materials, finished for a lifetime of quiet service.</p>
-    </div>
-  </div>
-</section>
+  </section>
+</main>
 
 <app-footer></app-footer>
